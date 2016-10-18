@@ -111,6 +111,10 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
     
     override func viewDidAppear(animated: Bool) {
         
+        // Show/Save selected date
+        print("Start Time : ",startTime?.date?.strDateInUTC)
+        print("End Time : ",endTime?.date?.strDateInUTC)
+        
         ref = FIRDatabase.database().reference()
         let userID = FIRAuth.auth()?.currentUser?.uid
         
