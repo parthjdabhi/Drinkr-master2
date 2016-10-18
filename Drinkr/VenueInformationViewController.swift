@@ -246,7 +246,7 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
             let Data = ["image": strProfile]
             
             CommonUtils.sharedUtils.showProgress(self.view, label: "Updating profile..")
-            FIRDatabase.database().reference().child("venues").child(AppState.MyUserID()).updateChildValues(Data, withCompletionBlock: { (error, ref) in
+            FIRDatabase.database().reference().child("venues").child(myUserID ?? "").updateChildValues(Data, withCompletionBlock: { (error, ref) in
                 CommonUtils.sharedUtils.hideProgress()
                 if error == nil {
                     CommonUtils.sharedUtils.showAlert(self, title: "Message", message: "Profile updated succcessfully!")

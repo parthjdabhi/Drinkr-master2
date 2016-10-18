@@ -6,6 +6,8 @@
 //  Copyright © 2016 Harloch. All rights reserved.
 //
 
+
+
 struct Constants {
     
     struct NotificationKeys {
@@ -25,7 +27,3 @@ struct Constants {
     }
 }
 
-//Globals
-var bars:[Dictionary<String,AnyObject>] = []
-var filteredBars:[Dictionary<String,AnyObject>] = []
-var selectedBar: Dictionary<String,AnyObject> = [:]

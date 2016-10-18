@@ -7,8 +7,9 @@
 //
 
 import Foundation
-import Firebase
 import UIKit
+import Firebase
+import CoreLocation
 
 class AppState: NSObject {
     
@@ -22,7 +23,14 @@ class AppState: NSObject {
     var venue: UserData?
     var venueInfo: String?
     
-    static func MyUserID() -> String {
-        return FIRAuth.auth()?.currentUser?.uid ?? ""
-    }
 }
+
+
+let myUserID = {
+    return FIRAuth.auth()?.currentUser?.uid
+}()
+
+//Globals
+var bars:[Dictionary<String,AnyObject>] = []
+var filteredBars:[Dictionary<String,AnyObject>] = []
+var selectedBar: Dictionary<String,AnyObject> = [:]

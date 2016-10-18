@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2088180712ADF7319B878381 /* Pods_Drinkr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E29F345ADA7E699FED85017 /* Pods_Drinkr.framework */; };
+		5E7A30061DB65D67002F007E /* MyAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7A30051DB65D67002F007E /* MyAnnotation.swift */; };
 		DA36907C1DB0235C00C6A057 /* CouponLayout.png in Resources */ = {isa = PBXBuildFile; fileRef = DA36907A1DB0235C00C6A057 /* CouponLayout.png */; };
 		DA36907D1DB0235C00C6A057 /* RedeemedButton.png in Resources */ = {isa = PBXBuildFile; fileRef = DA36907B1DB0235C00C6A057 /* RedeemedButton.png */; };
 		DA3690C01DB0A76D00C6A057 /* SWRevealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3690BF1DB0A76D00C6A057 /* SWRevealViewController.swift */; };
@@ -72,6 +73,7 @@
 
 /* Begin PBXFileReference section */
 		5E29F345ADA7E699FED85017 /* Pods_Drinkr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Drinkr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E7A30051DB65D67002F007E /* MyAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAnnotation.swift; sourceTree = "<group>"; };
 		63D7516C98595C23AC7E62C4 /* Pods-Drinkr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Drinkr.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Drinkr/Pods-Drinkr.debug.xcconfig"; sourceTree = "<group>"; };
 		DA36907A1DB0235C00C6A057 /* CouponLayout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CouponLayout.png; sourceTree = "<group>"; };
 		DA36907B1DB0235C00C6A057 /* RedeemedButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RedeemedButton.png; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 				DA5B5F341DB5C56B00DEC3F0 /* PDCarouselFlowLayout.swift */,
 				DAA2FEE91DB46F2F00889935 /* Sliding Control */,
 				DAC42AD01DA5E8010075F524 /* MBProgressHUD-master */,
+				5E7A30051DB65D67002F007E /* MyAnnotation.swift */,
 			);
 			name = "Helper Files";
 			sourceTree = "<group>";
@@ -522,6 +525,7 @@
 				DA3690C01DB0A76D00C6A057 /* SWRevealViewController.swift in Sources */,
 				DAC42AD91DA6BB590075F524 /* VenueRegisterViewController.swift in Sources */,
 				DA5B5F371DB5C7CC00DEC3F0 /* ViewBarViewController.swift in Sources */,
+				5E7A30061DB65D67002F007E /* MyAnnotation.swift in Sources */,
 				DAC42ACF1DA5E7FD0075F524 /* AEXML.swift in Sources */,
 				DAC42ABC1DA5E1CC0075F524 /* MapViewController.swift in Sources */,
 				DAC42ACB1DA5E7FD0075F524 /* RotateImage.swift in Sources */,
@@ -681,7 +685,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.harloch.Drinkr;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/dustin/Desktop/Drinkr/Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -698,7 +702,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.harloch.Drinkr;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/dustin/Desktop/Drinkr/Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

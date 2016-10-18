@@ -2,12 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "pin_green.png",
+      "filename" : "glass.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "pin_green@2x.png",
       "scale" : "2x"
     },
     {

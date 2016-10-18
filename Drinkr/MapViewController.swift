@@ -63,6 +63,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         
+        mapView.delegate = self
         mapView.showsUserLocation = true
         
         self.cvBars.showsHorizontalScrollIndicator = false
@@ -210,7 +211,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                         self.mapView.addAnnotations([dropPin])
                     }
                 }
-                
+                 
                 //let jsonDic = NSJSONSerialization.JSONObjectWithData(childDict, options: NSJSONReadingOptions.MutableContainers, error: &error) as Dictionary<String, AnyObject>;
                 for key : AnyObject in childDict.allKeys {
                     let stringKey = key as! String
@@ -240,8 +241,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 CommonUtils.sharedUtils.hideProgress()
                 self.isRefreshingData = false
                 self.filterData()
-                self.ShowFilteredGamePlace()
-                print(bars)
+                self.ShowFilteredPlace()
+                //print(bars)
             }
         }
         //*/
@@ -267,12 +268,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 }
                 return false
             })
+        } else {
+            filteredBars = bars
         }
         
         cvBars.reloadData()
     }
     
-    func ShowFilteredGamePlace(LatLongDelta:CLLocationDegrees = 0.05)
+    func ShowFilteredPlace()
     {
         mapView.removeAnnotations(mapView.annotations)
         
@@ -282,19 +285,51 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             let latitude = NSString(string: element["lat"] as? String ?? "0").doubleValue
             let longitude = NSString(string: element["long"] as? String ?? "0").doubleValue
             let coordinate = CLLocationCoordinate2DMake(latitude, longitude)
-            let annotation = MKPointAnnotation()
+            
+            let pinImage = (element["drinkForLike"] != nil) ? UIImage(named: "pin_green")! : UIImage(named: "pin_red")!
+            
+            let annotation = MyAnnotation(pinImage: pinImage)
+            //let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             annotation.title = element["venueName"] as? String ?? ""    //venueAddress
-            self.mapView.addAnnotation(annotation)
+            //self.mapView.addAnnotation(annotation)
+            
+            let pinAnnotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pin")
+            self.mapView.addAnnotation(pinAnnotationView.annotation!)
         }
         
-        //        let latDelta:CLLocationDegrees = 0.05
-        //        let lonDelta:CLLocationDegrees = 0.05
-        //        let span:MKCoordinateSpan = MKCoordinateSpanMake(latDelta, lonDelta)
-        //        let region:MKCoordinateRegion = MKCoordinateRegionMake(CLocation.coordinate, span)
-        //        self.mapView.setRegion(region, animated: false)
+//        let latDelta:CLLocationDegrees = 0.05
+//        let lonDelta:CLLocationDegrees = 0.05
+//        let span:MKCoordinateSpan = MKCoordinateSpanMake(latDelta, lonDelta)
+//        let region:MKCoordinateRegion = MKCoordinateRegionMake(CLocation.coordinate, span)
+//        self.mapView.setRegion(region, animated: false)
     }
-    //*/
+    
+    // MARK: MapView Methods
+    
+    //MARK: - Custom Annotation
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        // Don't want to show a custom image if the annotation is the user's location.
+        guard !annotation.isKindOfClass(MKUserLocation) else {
+            return nil
+        }
+        
+        let reuseIdentifier = "pin"
+        var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseIdentifier)
+        
+        if annotationView == nil {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
+            annotationView?.canShowCallout = true
+        } else {
+            annotationView?.annotation = annotation
+        }
+        
+        let customPointAnnotation = annotation as! MyAnnotation
+        annotationView?.image = customPointAnnotation.pinImage
+        
+        return annotationView
+    }
+    
     
     // MARK: - Card Collection Delegate & DataSource
     
@@ -330,7 +365,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         cell.lblDealDetail.text = bar["drinkForLike"] as? String ?? ""
         cell.lblTime.text = bar["venueOpenUntil"] as? String ?? ""
         
-        
         if let cLocation = currentLocation
         {
             let latitude = NSString(string: bar["lat"] as? String ?? "0").doubleValue
@@ -348,13 +382,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         collectionView.deselectItemAtIndexPath(indexPath, animated: true)
         
-        let bar = filteredBars[indexPath.row]
-        let latitude = NSString(string: bar["lat"] as? String ?? "0").doubleValue
-        let longitude = NSString(string: bar["long"] as? String ?? "0").doubleValue
-        let loc = CLLocation(latitude: latitude, longitude: longitude)
-        let region = MKCoordinateRegion(center: loc.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
-        self.mapView.setRegion(region, animated: true)
+//        let bar = filteredBars[indexPath.row]
+//        let latitude = NSString(string: bar["lat"] as? String ?? "0").doubleValue
+//        let longitude = NSString(string: bar["long"] as? String ?? "0").doubleValue
+//        let loc = CLLocation(latitude: latitude, longitude: longitude)
+//        let region = MKCoordinateRegion(center: loc.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
+//        self.mapView.setRegion(region, animated: true)
         //selectedBar = filteredBars[indexPath.row]
+        
+        selectedBar = filteredBars[indexPath.row]
+        
+        let barViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ViewBarViewController") as! ViewBarViewController
+        self.navigationController?.pushViewController(barViewController, animated: true)
+        
     }
     
     func loadUserImageToImageView(imgUser:UIImageView,uid:String) {

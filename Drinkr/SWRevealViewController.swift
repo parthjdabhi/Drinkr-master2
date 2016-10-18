@@ -9,6 +9,8 @@
 import UIKit
 import SWRevealViewController
 import Firebase
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 class SWRevealViewController: UIViewController {
     
@@ -29,8 +31,16 @@ class SWRevealViewController: UIViewController {
         
     }
 
-    @IBAction func logoutButton(sender: AnyObject) {
+    @IBAction func logoutButton(sender: AnyObject)
+    {
+        //Firebase
         try! FIRAuth.auth()?.signOut()
+        
+        //Facebook
+        let loginManager: FBSDKLoginManager = FBSDKLoginManager()
+        loginManager.logOut()
+        
+        //App States
         AppState.sharedInstance.signedIn = false
         let loginViewController = self.storyboard?.instantiateViewControllerWithIdentifier("InitialViewController") as! InitialViewController!
         self.navigationController?.pushViewController(loginViewController, animated: true)

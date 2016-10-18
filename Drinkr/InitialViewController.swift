@@ -36,8 +36,7 @@ class InitialViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         if (FBSDKAccessToken.currentAccessToken() != nil)
         {
-            print (FBSDKAccessToken.currentAccessToken().permissions)
-            
+            print(FBSDKAccessToken.currentAccessToken().permissions)
         }
         
         /*

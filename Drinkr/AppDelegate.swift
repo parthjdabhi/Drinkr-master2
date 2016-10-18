@@ -28,6 +28,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FIRApp.configure()
 
+        
+        if let user = FIRAuth.auth()?.currentUser
+        {
+            print(user)
+            if user.providerData.count > 0
+                && user.providerData[0].providerID == "facebook.com"
+            {
+                
+                print(myUserID)
+            }
+            
+            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let rootViewController = mainStoryboard.instantiateViewControllerWithIdentifier("SWRevealViewController") as? UIViewController
+            let navigationController = UINavigationController(rootViewController: rootViewController!)
+            navigationController.navigationBarHidden = true // or not, your choice.
+            self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+            self.window!.rootViewController = navigationController
+            self.window!.makeKeyAndVisible()
+        }
+        else
+        {
+//            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//            let navigationController = mainStoryboard.instantiateViewControllerWithIdentifier("navSignin") as? UINavigationController
+//            navigationController?.navigationBarHidden = true // or not, your choice.
+//            self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+//            self.window!.rootViewController = navigationController
+//            self.window!.makeKeyAndVisible()
+        }
+        
         return true
     }
     
