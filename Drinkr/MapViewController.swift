@@ -130,40 +130,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     // MARK: -  Get Data
-    //*
     func refreshData()
     {
         let userID = FIRAuth.auth()?.currentUser?.uid
-        //        ref.child("venues").observeEventType(FIRDataEventType.Value, withBlock: { snapshot in
-        //
-        //            for childSnap in snapshot.children.allObjects {
-        //                let snap = childSnap as! FIRDataSnapshot
-        //                if userID != snap.key {
-        //                    let approvalStatus = snap.value!["approvalStatus"] as! String!
-        //                    if approvalStatus == "Approved"
-        //                    {
-        //                        self.venueName = snap.value!["venueName"] as! String!
-        //                        let lat = snap.value!["lat"] as! Double!
-        //                        let long = snap.value!["long"] as! Double!
-        //                        let openUntil = snap.value!["venueOpenUntil"] as! String!
-        //                        let drinkForLike = snap.value!["drinkForLike"] as! String!
-        //                        let drinkForCheckIn = snap.value!["drinkForCheckIn"] as! String!
-        //
-        //                        let coordinatePoints = CLLocationCoordinate2DMake(lat, long)
-        //                        let dropPin = MKPointAnnotation()
-        //                        dropPin.coordinate = coordinatePoints
-        //                        dropPin.title = self.venueName
-        //                        dropPin.subtitle = openUntil
-        //                        dropPin.subtitle = drinkForLike
-        //                        dropPin.subtitle = drinkForCheckIn
-        //
-        //                        self.mapView.addAnnotations([dropPin])
-        //                    }
-        //                }
-        //            }
-        //        })
-        
-        // /*
         
         if isRefreshingData == true {
             return
@@ -245,10 +214,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 //print(bars)
             }
         }
-        //*/
     }
     
-    ///*
     func filterData()
     {
         //Sort Data
@@ -429,13 +396,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         currentPage = Int(floor((offset - pageSide / 2) / pageSide) + 1)
         print("currentPage = \(currentPage)")
         
-        //        let bar = filteredBars[currentPage]
-        //        let lat = Double(bar["lat"] as? String ?? "1") ?? 0
-        //        let long = Double(bar["long"] as? String ?? "1") ?? 0
-        //
-        //        let center = CLLocationCoordinate2D(latitude: lat, longitude: long)
-        //        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
-        //        self.mvLocation.setRegion(region, animated: true)
+        let bar = filteredBars[currentPage]
+        //if let lat = bar["lat"] as? String,long = ["long"] as? String {
+            if let lat = Double(bar["lat"] as? String ?? "1"),let long = Double(bar["long"] as? String ?? "1") {
+            let center = CLLocationCoordinate2D(latitude: lat, longitude: long)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
+            self.mapView.setRegion(region, animated: true)
+            }
+        //}
     }
 
 }

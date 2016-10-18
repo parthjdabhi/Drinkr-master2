@@ -33,16 +33,22 @@ class SWRevealViewController: UIViewController {
 
     @IBAction func logoutButton(sender: AnyObject)
     {
-        //Firebase
-        try! FIRAuth.auth()?.signOut()
-        
-        //Facebook
-        let loginManager: FBSDKLoginManager = FBSDKLoginManager()
-        loginManager.logOut()
-        
-        //App States
-        AppState.sharedInstance.signedIn = false
-        let loginViewController = self.storyboard?.instantiateViewControllerWithIdentifier("InitialViewController") as! InitialViewController!
-        self.navigationController?.pushViewController(loginViewController, animated: true)
+        let actionSheetController = UIAlertController (title: "Message", message: "Are you sure want to logout?", preferredStyle: UIAlertControllerStyle.ActionSheet)
+        actionSheetController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
+        actionSheetController.addAction(UIAlertAction(title: "Logout", style: UIAlertActionStyle.Destructive, handler: { (actionSheetController) -> Void in
+            print("handle Logout action...")
+            //Firebase
+            try! FIRAuth.auth()?.signOut()
+            
+            //Facebook
+            let loginManager: FBSDKLoginManager = FBSDKLoginManager()
+            loginManager.logOut()
+            
+            //App States
+            AppState.sharedInstance.signedIn = false
+            let loginViewController = self.storyboard?.instantiateViewControllerWithIdentifier("InitialViewController") as! InitialViewController!
+            self.navigationController?.pushViewController(loginViewController, animated: true)
+        }))
+        self.presentViewController(actionSheetController, animated: true, completion: nil)
     }
 }

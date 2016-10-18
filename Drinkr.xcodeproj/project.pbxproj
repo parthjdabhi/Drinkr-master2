@@ -214,6 +214,7 @@
 				DAC42ABB1DA5E1CC0075F524 /* MapViewController.swift */,
 				DA3690BF1DB0A76D00C6A057 /* SWRevealViewController.swift */,
 				DA5B5F361DB5C7CC00DEC3F0 /* ViewBarViewController.swift */,
+				DA5B5F321DB5C1FF00DEC3F0 /* BarNearbyMeCollectionViewCell.swift */,
 				DAC42ADC1DA6C2E30075F524 /* Venue Screens */,
 				DAC42ABD1DA5E79F0075F524 /* Helper Files */,
 				DAC42AD11DA5E8180075F524 /* Storyboard & List Files */,
@@ -288,7 +289,6 @@
 				DACD0AF21DAC4E7700989143 /* VenueLoginViewController.swift */,
 				DAC42AD81DA6BB590075F524 /* VenueRegisterViewController.swift */,
 				DAC42ADA1DA6C2CC0075F524 /* VenueInformationViewController.swift */,
-				DA5B5F321DB5C1FF00DEC3F0 /* BarNearbyMeCollectionViewCell.swift */,
 			);
 			name = "Venue Screens";
 			sourceTree = "<group>";

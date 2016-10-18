@@ -95,3 +95,68 @@ extension String {
         return NSNumberFormatter().numberFromString(self)?.doubleValue
     }
 }
+
+
+extension NSDateFormatter {
+    convenience init(dateFormat: String) {
+        self.init()
+        self.dateFormat =  dateFormat
+    }
+}
+
+extension NSDate {
+    struct Formatter {
+        //user_upload_time : Format (YYYY-MM-DD HH:MM:SS) 2016-08-02 11:22:11 (24 hours)    //"yyyy-MM-dd, HH:mm:ss"
+        static let custom = NSDateFormatter(dateFormat: "HH:mm:ss")
+        static let customUTC = NSDateFormatter(dateFormat: "HH:mm:ss")
+    }
+    var strDateInLocal: String {
+        //formatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)  // you can set GMT time
+        //formatter.timeZone = NSTimeZone.localTimeZone()        // or as local time
+        return Formatter.custom.stringFromDate(self)
+    }
+    var strDateInUTC: String {
+        Formatter.customUTC.timeZone = NSTimeZone(name: "UTC")
+        return Formatter.customUTC.stringFromDate(self)
+    }
+    func formattedWith(format:String? = "dd MMM yyyy")-> String {
+        let formatter = NSDateFormatter()
+        //formatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)  // you can set GMT time
+        formatter.timeZone = NSTimeZone.localTimeZone()        // or as local time
+        formatter.dateFormat = format
+        return formatter.stringFromDate(self)
+    }
+}
+
+extension String {
+    
+    
+    var asDateLocal: NSDate? {
+        return NSDate.Formatter.custom.dateFromString(self)
+    }
+    var asDateUTC: NSDate? {
+        NSDate.Formatter.customUTC.timeZone = NSTimeZone(name: "UTC")
+        return NSDate.Formatter.customUTC.dateFromString(self)
+    }
+    func asDateFormatted(with dateFormat: String) -> NSDate? {
+        return NSDateFormatter(dateFormat: dateFormat).dateFromString(self)
+    }
+    var asDateFromMiliseconds: NSDate? {
+        if let interval = Double(self) {
+            return NSDate.init(timeIntervalSince1970: interval)
+        }
+        return nil
+    }
+    
+    func convertToDictionary() -> [String:AnyObject]? {
+        if let data = self.dataUsingEncoding(NSUTF8StringEncoding) {
+            do {
+                return try NSJSONSerialization.JSONObjectWithData(data, options: [.AllowFragments]) as? [String:AnyObject]
+            } catch let error as NSError {
+                print(error)
+            }
+        }
+        return nil
+    }
+}
+

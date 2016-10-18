@@ -71,8 +71,8 @@ class ViewBarViewController: UIViewController, FBSDKSharingDelegate {
         
         //Share using FB SDK to identify actual sharing result.
         let content = FBSDKShareLinkContent()
-        //content.contentTitle = "Hello Test this from this"
-        content.contentURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
+        content.contentTitle = "I’m Checking In At \((selectedBar["venueName"] as? String ?? "")!)!"
+        //content.contentURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
         content.imageURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
         
         FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: self)

@@ -8,9 +8,13 @@
 
 import UIKit
 import Firebase
+import FBSDKCoreKit
+import FBSDKLoginKit
 import CoreLocation
+import IQKeyboardManagerSwift
+import IQDropDownTextField
 
-class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource {
+class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, IQDropDownTextFieldDelegate {
     
     @IBOutlet var vDays: UIView!
     @IBOutlet var checkIcon: UIButton!
@@ -22,8 +26,9 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
     @IBOutlet var barName: UILabel!
     @IBOutlet var drinkForCheckInBool: UISwitch!
     @IBOutlet var drinkForLikeBool: UISwitch!
-    @IBOutlet var startTime: UITextField!
-    @IBOutlet var endTime: UITextField!
+    
+    @IBOutlet var startTime: IQDropDownTextField?
+    @IBOutlet var endTime: IQDropDownTextField?
     @IBOutlet var drinkTable: UITableView!
     
     let cellReuseIdentifier = "cell"
@@ -45,6 +50,7 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
     
     let alertController = UIAlertController()
     
+    // MARK: -
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -71,6 +77,15 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
         sControl.addTarget(self, action: #selector(VenueInformationViewController.sliderControlChangedValue(_:)), forControlEvents: .ValueChanged)
         vDays.addSubview(sControl)
         
+        startTime?.isOptionalDropDown = false
+        startTime?.dropDownMode = IQDropDownMode.TimePicker
+        startTime?.setDate(NSDate(), animated: true)
+        startTime?.delegate = self
+        
+        endTime?.isOptionalDropDown = false
+        endTime?.dropDownMode = IQDropDownMode.TimePicker
+        endTime?.setDate(NSDate(), animated: true)
+        endTime?.delegate = self
         
         addressField.userInteractionEnabled = false
         detailsField.userInteractionEnabled = false
@@ -132,9 +147,36 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - IQDropDownTextFieldDelegate Methods
+    func textField(textField: IQDropDownTextField, didSelectDate date: NSDate?) {
+        print(date)
+    }
+    
     func sliderControlChangedValue(sliderControl:SlidingControl) {
         print("Selected index \(sliderControl.selectedSegmentIndex) UIControlEventValueChanged")
         print("Selected Day - \(NSDate().daysOfTheWeek().AllDays[sliderControl.selectedSegmentIndex])")
+    }
+    
+    @IBAction func logoutButton(sender: AnyObject)
+    {
+        let actionSheetController = UIAlertController (title: "Message", message: "Are you sure want to logout?", preferredStyle: UIAlertControllerStyle.ActionSheet)
+        actionSheetController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
+        actionSheetController.addAction(UIAlertAction(title: "Logout", style: UIAlertActionStyle.Destructive, handler: { (actionSheetController) -> Void in
+            print("handle Logout action...")
+            //Firebase
+            try! FIRAuth.auth()?.signOut()
+            
+            //Facebook
+            let loginManager: FBSDKLoginManager = FBSDKLoginManager()
+            loginManager.logOut()
+            
+            //App States
+            AppState.sharedInstance.signedIn = false
+            let loginViewController = self.storyboard?.instantiateViewControllerWithIdentifier("InitialViewController") as! InitialViewController!
+            self.navigationController?.pushViewController(loginViewController, animated: true)
+        }))
+        presentViewController(actionSheetController, animated: true, completion: nil)
+        
     }
     
     @IBAction func editButton(sender: AnyObject) {
@@ -261,6 +303,7 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
         self.dismissViewControllerAnimated(true, completion: nil);
     }
     
+    // MARK: -
     func forwardGeocoding(address: String) {
         CLGeocoder().geocodeAddressString(address, completionHandler: { (placemarks, error) in
             if error != nil {
@@ -281,8 +324,6 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
             }
         })
     }
-    
-    
     
     func switchIsChanged(mySwitch: UISwitch) {
         let userID = FIRAuth.auth()?.currentUser?.uid
