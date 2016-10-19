@@ -1192,6 +1192,10 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="dKy-bT-UpM" id="50n-63-PSV"/>
+                                    <outlet property="delegate" destination="dKy-bT-UpM" id="7RI-MB-cbh"/>
+                                </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N0o-bi-h4V">
                                 <rect key="frame" x="0.0" y="224" width="375" height="46"/>

@@ -22,12 +22,43 @@ class ViewBarViewController: UIViewController, FBSDKSharingDelegate {
     @IBOutlet var header: UIImageView!
     @IBOutlet var vDays: UIView!
     
-    var ref:FIRDatabaseReference!
+    let cellReuseIdentifier = "cell"
+    let cellReuseIdentifier1 = "cell1"
+    
+    var SelectedDayTodealsOn:String?
+    var DealOnSelectedDay:Dictionary<String,AnyObject> = [:]
+    var isRefreshingData = false
+    
+    var ref:FIRDatabaseReference = FIRDatabase.database().reference()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ref = FIRDatabase.database().reference()
+        SelectedDayTodealsOn = NSDate().daysOfTheWeek().AllDays[0]
+        print("selectedBar",selectedBar)
+        
+        DealOnSelectedDay = (selectedBar["drinkSpecials"] as? Dictionary<String,AnyObject>)?[SelectedDayTodealsOn!] as? Dictionary<String,AnyObject> ?? [:]
+        
+        //Sliding control
+        let sControl = SlidingControl(sectionTitles: NSDate().daysOfTheWeek().DaysWithToday)
+        sControl.autoresizingMask = [.FlexibleRightMargin, .FlexibleWidth]
+        vDays.layoutIfNeeded()
+        sControl.frame = vDays.frame
+        sControl.frame.origin.y = 0
+        sControl.segmentEdgeInset = UIEdgeInsetsMake(0, 10, 10, 10)
+        sControl.selectionStyle = SlidingControlSelectionStyle.FullWidthStripe
+        sControl.selectionIndicatorLocation = .Down
+        sControl.verticalDividerEnabled = true
+        sControl.verticalDividerColor = UIColor.whiteColor()
+        sControl.verticalDividerWidth = 1.0
+        sControl.backgroundColor = UIColor.blueColor()
+        
+        sControl.titleFormatter = [NSForegroundColorAttributeName:UIColor.whiteColor()]
+        sControl.selectionIndicatorColor = UIColor.blackColor()
+        sControl.addTarget(self, action: #selector(VenueInformationViewController.sliderControlChangedValue(_:)), forControlEvents: .ValueChanged)
+        vDays.addSubview(sControl)
+        
+        
 //        ref.child("venues").child(selectedBar["key"] as? String ?? "").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
 //            if let venueName = snapshot.value!["venueName"] {
 //                self.barName.text = venueName as! String!
@@ -46,8 +77,9 @@ class ViewBarViewController: UIViewController, FBSDKSharingDelegate {
         
         barName.text = selectedBar["venueName"] as? String ?? ""
         barAddress.text = selectedBar["venueAddress"] as? String ?? ""
-        dealUntil.text = selectedBar["venueOpenUntil"] as? String ?? ""
+        dealUntil.text = ("\((selectedBar["venueOpenUntil"] as? String ?? "")!) - \((selectedBar["venueOpenFrom"] as? String ?? "")!)")
         telephoneField.text = selectedBar["venueTelephone"] as? String ?? ""
+        
         
     }
     
@@ -55,7 +87,65 @@ class ViewBarViewController: UIViewController, FBSDKSharingDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func sliderControlChangedValue(sliderControl:SlidingControl)
+    {
+        print("Selected index \(sliderControl.selectedSegmentIndex) UIControlEventValueChanged")
+        print("Selected Day - \(NSDate().daysOfTheWeek().AllDays[sliderControl.selectedSegmentIndex])")
+        
+        SelectedDayTodealsOn = NSDate().daysOfTheWeek().AllDays[sliderControl.selectedSegmentIndex]
+        DealOnSelectedDay = (selectedBar["drinkSpecials"] as? Dictionary<String,AnyObject>)?[SelectedDayTodealsOn!] as? Dictionary<String,AnyObject> ?? [:]
+        self.drinksTable.reloadData()
+    }
+    
 
+    // MARK: - Tableview Delegates
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if tableView != self.drinksTable {
+            return 0
+        }
+        
+        if DealOnSelectedDay.keys.count == 0 {
+            let emptyLabel = UILabel(frame: tableView.frame)
+            emptyLabel.text = "No deal available for \((self.SelectedDayTodealsOn ?? "")!)"
+            emptyLabel.textColor = UIColor.lightGrayColor();
+            emptyLabel.font = UIFont(name: emptyLabel.font?.fontName ?? "", size: 11)
+            emptyLabel.textAlignment = .Center;
+            emptyLabel.numberOfLines = 3
+            
+            tableView.backgroundView = emptyLabel
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            return 0
+        } else {
+            tableView.backgroundView = nil
+            return DealOnSelectedDay.count
+        }
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        var cell:UITableViewCell?
+        
+        if tableView == self.drinksTable
+        {
+            let key = ([String] (DealOnSelectedDay.keys))[indexPath.row]
+            let dict = DealOnSelectedDay[key] as? Dictionary<String,AnyObject> ?? [:]
+            cell = drinksTable.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+            let drinks = dict["Drink"] as? String ?? ""
+            let prices = dict["Price"] as? String ?? ""
+            let str = "\(drinks)     \(prices)"
+            cell!.textLabel!.textAlignment = .Center
+            cell!.textLabel!.text = "\(str)"
+        }
+        return cell!
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    
+    // MARK: -
     @IBAction func freeDrinkFor(sender: AnyObject)
     {
 //        if SLComposeViewController.isAvailableForServiceType(SLServiceTypeFacebook){
@@ -87,9 +177,56 @@ class ViewBarViewController: UIViewController, FBSDKSharingDelegate {
     func sharer(sharer: FBSDKSharing!, didCompleteWithResults results: [NSObject : AnyObject]!) {
         print("Sharing success : ",results)
         if results["postId"] != nil {
-            SVProgressHUD.showSuccessWithStatus("Thank you!")
+            //SVProgressHUD.showSuccessWithStatus("Thank you!")
+            
+            SVProgressHUD.showWithStatus("Loading..")
+            let data:Dictionary<String,AnyObject> = ["userId" : myUserID ?? "", "postId": results["postId"] ?? "","venueId":selectedBar["key"] ?? "","venueName":selectedBar["venueName"] ?? "", "sharedAt": NSDate().timeIntervalSinceNow,"sharedDate": NSDate().strDateInUTC]
+            ref.child("checkin").queryOrderedByChild("userId").queryEqualToValue(myUserID ?? "").queryLimitedToLast(1).observeSingleEventOfType(.Value, withBlock: { (snapshot) -> Void in
+                
+                print("\(NSDate().timeIntervalSince1970)")
+                //self.tblGroups.reloadData()
+                var founds = false
+                for child in snapshot.children {
+                    
+                    var placeDict = Dictionary<String,AnyObject>()
+                    let childDict = child.valueInExportFormat() as! NSDictionary
+                    //print(childDict)
+                    
+                    //let jsonDic = NSJSONSerialization.JSONObjectWithData(childDict, options: NSJSONReadingOptions.MutableContainers, error: &error) as Dictionary<String, AnyObject>;
+                    for key : AnyObject in childDict.allKeys {
+                        let stringKey = key as! String
+                        if let keyValue = childDict.valueForKey(stringKey) as? String {
+                            placeDict[stringKey] = keyValue
+                        } else if let keyValue = childDict.valueForKey(stringKey) as? Double {
+                            placeDict[stringKey] = "\(keyValue)"
+                        }
+                        else if let keyValue = childDict.valueForKey(stringKey) as? Dictionary<String,AnyObject> {
+                            placeDict[stringKey] = keyValue
+                        }
+                        else if let keyValue = childDict.valueForKey(stringKey) as? NSDictionary {
+                            placeDict[stringKey] = keyValue
+                        }
+                        
+                    }
+                    placeDict["key"] = child.key
+                    
+                    
+                    print((placeDict["sharedDate"] as? String)?.asDateUTC)
+                    if ((placeDict["sharedDate"] as? String)?.asDateUTC?.isCheckinWithinSameDay() == true) {
+                        founds = true
+                    }
+                }
+                
+                if founds == true {
+                    SVProgressHUD.showErrorWithStatus("You can not use another deal in same day!", maskType: .Gradient)
+                } else {
+                    SVProgressHUD.showSuccessWithStatus("Thank you!", maskType: .Gradient)
+                    self.ref.child("checkin").childByAutoId().updateChildValues(data)
+                }
+            })
+            
         } else {
-            SVProgressHUD.showErrorWithStatus("Sharing failed!")
+            SVProgressHUD.showErrorWithStatus("Sharing failed!", maskType: .Gradient)
         }
     }
     

@@ -253,7 +253,27 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             let longitude = NSString(string: element["long"] as? String ?? "0").doubleValue
             let coordinate = CLLocationCoordinate2DMake(latitude, longitude)
             
-            let pinImage = (element["drinkForLike"] != nil) ? UIImage(named: "pin_green")! : UIImage(named: "pin_red")!
+            var pinImage = UIImage(named: "pin_small_grey")!
+            
+            if let venueOpenFrom = element["venueOpenFrom"] as? String, venueOpenUntil = element["venueOpenUntil"] as? String {
+                let SDate = Double("2016-08-02 \(venueOpenFrom):00".asDateUTC?.formattedWith("ddHHmm") ?? "0")
+                let EDate = Double("2016-08-02 \(venueOpenUntil):00".asDateUTC?.formattedWith("ddHHmm") ?? "0")
+                let CDate = Double("2016-08-02 \(NSDate().formattedWith("HH:mm:ss"))".asDateUTC!.formattedWith("ddHHmm") ?? "0")
+                
+                if CDate > SDate
+                    && CDate < EDate
+                {
+                    pinImage = UIImage(named: "pin_small_green")!
+                } else {
+                    pinImage = UIImage(named: "pin_small_blue")!
+                }
+                
+//                let SCDate = "\(NSDate().formattedWith("yyyy-MM-dd")) \(venueOpenFrom):00".asDateUTC
+//                print("\(NSDate().formattedWith("yyyy-MM-dd")) \(venueOpenFrom):00".asDateUTC?.formattedWith("HH:mm"))
+//                
+//                let ECDate = "\(NSDate().formattedWith("yyyy-MM-dd")) \(venueOpenUntil):00".asDateUTC
+//                print("\(NSDate().formattedWith("yyyy-MM-dd")) \(venueOpenUntil):00".asDateUTC?.formattedWith("HH:mm"))
+            }
             
             let annotation = MyAnnotation(pinImage: pinImage)
             //let annotation = MKPointAnnotation()
@@ -330,7 +350,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
         cell.lblBarTitle.text = bar["venueName"] as? String ?? ""
         cell.lblDealDetail.text = bar["drinkForLike"] as? String ?? ""
-        cell.lblTime.text = bar["venueOpenUntil"] as? String ?? ""
+        cell.lblTime.text = "\((bar["venueOpenUntil"] as? String ?? "")!) - \((bar["venueOpenFrom"] as? String ?? "")!)"
         
         if let cLocation = currentLocation
         {
@@ -380,7 +400,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             else {
                 //print("No Profile Picture")
             }
-            })
+        })
         { (error) in
             print(error.localizedDescription)
         }
@@ -397,13 +417,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         print("currentPage = \(currentPage)")
         
         let bar = filteredBars[currentPage]
-        //if let lat = bar["lat"] as? String,long = ["long"] as? String {
-            if let lat = Double(bar["lat"] as? String ?? "1"),let long = Double(bar["long"] as? String ?? "1") {
+        //If Location not available Map is not animated
+        if let lat = bar["lat"] as? String, long = bar["long"] as? String
+            where lat != "0" && long != "0" && lat != "0.0" && long != "0.0"
+        {
+            if let lat = Double(lat),let long = Double(long) {
             let center = CLLocationCoordinate2D(latitude: lat, longitude: long)
             let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
             self.mapView.setRegion(region, animated: true)
             }
-        //}
+        }
     }
 
 }

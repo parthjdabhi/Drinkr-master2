@@ -26,6 +26,10 @@ class AppState: NSObject {
 }
 
 
+//FireBase Storage
+let storage = FIRStorage.storage()
+let storageRef = storage.reference()
+
 let myUserID = {
     return FIRAuth.auth()?.currentUser?.uid
 }()

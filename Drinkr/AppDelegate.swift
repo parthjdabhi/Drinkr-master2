@@ -32,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let user = FIRAuth.auth()?.currentUser
         {
             print(user)
+            print(" :: Logged IN User :: ",myUserID)
+            
             if user.providerData.count > 0
                 && user.providerData[0].providerID == "facebook.com"
             {
@@ -54,7 +56,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.window!.rootViewController = navigationController
                 self.window!.makeKeyAndVisible()
             }
-            
         }
         else
         {

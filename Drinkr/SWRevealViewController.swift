@@ -11,20 +11,74 @@ import SWRevealViewController
 import Firebase
 import FBSDKCoreKit
 import FBSDKLoginKit
+import SVProgressHUD
 
 class SWRevealViewController: UIViewController {
     
     @IBOutlet var barName: UILabel!
     @IBOutlet var instructions: UILabel!
     
+    var ref:FIRDatabaseReference = FIRDatabase.database().reference()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
     
+    override func viewWillAppear(animated: Bool) {
+        refreshData()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func refreshData()
+    {
+        //firebaseRef.childByAppendingPath("registered_users")
+        //registeredUserRef.queryOrderedByChild("name")
+        
+        ref.child("checkin").queryOrderedByChild("userId").queryEqualToValue(myUserID ?? "").queryLimitedToLast(1).observeSingleEventOfType(.Value, withBlock: { (snapshot) -> Void in
+            
+            var CardAvailable = false
+            
+            print("\(NSDate().timeIntervalSince1970)")
+            //self.tblGroups.reloadData()
+            for child in snapshot.children {
+                
+                var placeDict = Dictionary<String,AnyObject>()
+                let childDict = child.valueInExportFormat() as! NSDictionary
+                //print(childDict)
+                
+                //let jsonDic = NSJSONSerialization.JSONObjectWithData(childDict, options: NSJSONReadingOptions.MutableContainers, error: &error) as Dictionary<String, AnyObject>;
+                for key : AnyObject in childDict.allKeys {
+                    let stringKey = key as! String
+                    if let keyValue = childDict.valueForKey(stringKey) as? String {
+                        placeDict[stringKey] = keyValue
+                    } else if let keyValue = childDict.valueForKey(stringKey) as? Double {
+                        placeDict[stringKey] = "\(keyValue)"
+                    }
+                    else if let keyValue = childDict.valueForKey(stringKey) as? Dictionary<String,AnyObject> {
+                        placeDict[stringKey] = keyValue
+                    }
+                    else if let keyValue = childDict.valueForKey(stringKey) as? NSDictionary {
+                        placeDict[stringKey] = keyValue
+                    }
+                }
+                placeDict["key"] = child.key
+                
+                self.barName.text = placeDict["venueName"] as? String ?? ""
+                
+                print((placeDict["sharedDate"] as? String)?.asDateUTC)
+                print((placeDict["sharedDate"] as? String)?.asDateUTC?.isCheckinWithinSameDay())
+                
+                CardAvailable = true
+            }
+            if CardAvailable == false {
+                SVProgressHUD.showWithStatus("You do not have any deal!")
+            }
+        })
     }
     
     @IBAction func redeemButton(sender: AnyObject) {

@@ -107,8 +107,8 @@ extension NSDateFormatter {
 extension NSDate {
     struct Formatter {
         //user_upload_time : Format (YYYY-MM-DD HH:MM:SS) 2016-08-02 11:22:11 (24 hours)    //"yyyy-MM-dd, HH:mm:ss"
-        static let custom = NSDateFormatter(dateFormat: "HH:mm:ss")
-        static let customUTC = NSDateFormatter(dateFormat: "HH:mm:ss")
+        static let custom = NSDateFormatter(dateFormat: "yyyy-MM-dd HH:mm:ss")
+        static let customUTC = NSDateFormatter(dateFormat: "yyyy-MM-dd HH:mm:ss")
     }
     var strDateInLocal: String {
         //formatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)  // you can set GMT time
@@ -157,6 +157,26 @@ extension String {
             }
         }
         return nil
+    }
+}
+
+extension Double {
+    var asDateFromMiliseconds: NSDate {
+        return NSDate.init(timeIntervalSince1970: self)
+    }
+}
+
+extension Dictionary {
+    subscript(i:Int) -> (key:Key,value:Value) {
+        get {
+            return self[startIndex.advancedBy(i)]
+        }
+    }
+}
+
+extension NSDate {
+    func isCheckinWithinSameDay() -> Bool {
+        return (self.formattedWith("DD") == NSDate().formattedWith("DD")) ? true : false
     }
 }
 
