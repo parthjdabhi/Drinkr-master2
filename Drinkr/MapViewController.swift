@@ -33,6 +33,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     var isRefreshingData = false
     var venueName:String = ""
     
+    var lastLocation: CLLocation?
     let geocoder: CLGeocoder = CLGeocoder()
     //var coordinate = CLLocationCoordinate2D()
     var locationManager: CLLocationManager = CLLocationManager()
@@ -93,19 +94,30 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         //self.performSegueWithIdentifier("sw_rear", sender: self)
     }
     
+    @IBAction func actionCurrentLocation(sender: AnyObject) {
+        
+        if let CLoc = lastLocation
+        {
+            let region = MKCoordinateRegion(center: CLoc.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
+            self.mapView.setRegion(region, animated: true)
+        }
+        
+    }
+    
     @IBAction func searchButton(sender: AnyObject) {
         
     }
     
     
     // MARK: -  Get Location
-    func locationManagerFunc(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let lastLocation: CLLocation = locations[locations.count - 1]
+    func locationManagerFunc(manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
+    {
+        lastLocation = locations[locations.count - 1]
         
-        print(String(format: "%.6f", lastLocation.coordinate.latitude))
-        print(String(format: "%.6f", lastLocation.coordinate.longitude))
+        //print(String(format: "%.6f", lastLocation?.coordinate.latitude))
+        //print(String(format: "%.6f", lastLocation?.coordinate.longitude))
         
-        animateMap(lastLocation)
+        animateMap(lastLocation!)
         
     }
     
@@ -311,8 +323,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             annotationView?.annotation = annotation
         }
         
-        let customPointAnnotation = annotation as! MyAnnotation
-        annotationView?.image = customPointAnnotation.pinImage
+        let customPointAnnotation = annotation as? MyAnnotation
+        annotationView?.image = customPointAnnotation?.pinImage
         
         return annotationView
     }
@@ -379,7 +391,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
         selectedBar = filteredBars[indexPath.row]
         
-        let barViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ViewBarViewController") as! ViewBarViewController
+        let barViewController = self.storyboard?.instantiateViewControllerWithIdentifier("BarDetailViewController") as! BarDetailViewController
         self.navigationController?.pushViewController(barViewController, animated: true)
         
     }

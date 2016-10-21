@@ -9,10 +9,12 @@
 import UIKit
 import Social
 import FBSDKShareKit
+import FBSDKLoginKit
+import FBSDKCoreKit
 import Firebase
 import SVProgressHUD
 
-class ViewBarViewController: UIViewController, FBSDKSharingDelegate {
+class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
     
     @IBOutlet var barName: UILabel!
     @IBOutlet var barAddress: UITextField!
@@ -22,8 +24,7 @@ class ViewBarViewController: UIViewController, FBSDKSharingDelegate {
     @IBOutlet var header: UIImageView!
     @IBOutlet var vDays: UIView!
     
-    let cellReuseIdentifier = "cell"
-    let cellReuseIdentifier1 = "cell1"
+    //let cellReuseIdentifier = "DrinksTableviewCell"
     
     var SelectedDayTodealsOn:String?
     var DealOnSelectedDay:Dictionary<String,AnyObject> = [:]
@@ -33,6 +34,8 @@ class ViewBarViewController: UIViewController, FBSDKSharingDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //drinksTable.registerClass(DrinksTableviewCell.self, forCellReuseIdentifier: "DrinksTableviewCell")
         
         SelectedDayTodealsOn = NSDate().daysOfTheWeek().AllDays[0]
         print("selectedBar",selectedBar)
@@ -49,9 +52,10 @@ class ViewBarViewController: UIViewController, FBSDKSharingDelegate {
         sControl.selectionStyle = SlidingControlSelectionStyle.FullWidthStripe
         sControl.selectionIndicatorLocation = .Down
         sControl.verticalDividerEnabled = true
-        sControl.verticalDividerColor = UIColor.whiteColor()
-        sControl.verticalDividerWidth = 1.0
-        sControl.backgroundColor = UIColor.blueColor()
+        sControl.verticalDividerWidth = 0.5
+        sControl.verticalDividerColor = clrDarkBlue
+        sControl.selectionIndicatorColor = UIColor.redColor()
+        sControl.backgroundColor = clrBlue
         
         sControl.titleFormatter = [NSForegroundColorAttributeName:UIColor.whiteColor()]
         sControl.selectionIndicatorColor = UIColor.blackColor()
@@ -125,20 +129,20 @@ class ViewBarViewController: UIViewController, FBSDKSharingDelegate {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell:UITableViewCell?
         
-        if tableView == self.drinksTable
-        {
-            let key = ([String] (DealOnSelectedDay.keys))[indexPath.row]
-            let dict = DealOnSelectedDay[key] as? Dictionary<String,AnyObject> ?? [:]
-            cell = drinksTable.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-            let drinks = dict["Drink"] as? String ?? ""
-            let prices = dict["Price"] as? String ?? ""
-            let str = "\(drinks)     \(prices)"
-            cell!.textLabel!.textAlignment = .Center
-            cell!.textLabel!.text = "\(str)"
-        }
-        return cell!
+        let cell:DrinksTableviewCell = self.drinksTable.dequeueReusableCellWithIdentifier("DrinksTableviewCell") as! DrinksTableviewCell
+        
+        let key = ([String] (DealOnSelectedDay.keys))[indexPath.row]
+        let dict = DealOnSelectedDay[key] as? Dictionary<String,AnyObject> ?? [:]
+        
+        //cell = self.drinksTable.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as? DrinksTableviewCell
+        let drinks = dict["Drink"] as? String ?? ""
+        let prices = dict["Price"] as? String ?? ""
+        
+        cell.lblDrinkName.text = drinks
+        cell.lblPrice.text = "£\(prices)"
+        
+        return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -158,14 +162,68 @@ class ViewBarViewController: UIViewController, FBSDKSharingDelegate {
 //            self.presentViewController(alert, animated: true, completion: nil)
 //        }
         
+        /*if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+            NSLog(@"publish_actions is already granted.");
+        } else {
+            FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
+            [loginManager logInWithPublishPermissions:@[@"publish_actions"] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+            //TODO: process error or result.
+            }];
+        }
+        
+        if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+            [[[FBSDKGraphRequest alloc]
+                initWithGraphPath:@"me/feed"
+                parameters: @{ @"message" : @"hello world!"}
+            HTTPMethod:@"POST"]
+            startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                if (!error) {
+                    NSLog(@"Post id:%@", result[@"id"]);
+                }
+            }];
+        }*/
+        
+        print("Token : \(FBSDKAccessToken.currentAccessToken().tokenString)")
+        
+        if (FBSDKAccessToken.currentAccessToken().hasGranted("publish_actions")) {
+            print("publish_actions is already granted. Token-\(FBSDKAccessToken.currentAccessToken())")
+            
+            FBSDKGraphRequest.init(graphPath: "me/feed", parameters: ["message" : "hello world!"], HTTPMethod: "POST").startWithCompletionHandler({ (connection, result, error) in
+                print("Post id : \(result) -- \(result["id"])")
+            })
+        } else {
+            SVProgressHUD.showErrorWithStatus("Missing facebook permission!", maskType: SVProgressHUDMaskType.Black)
+            
+            let FBLoginManager = FBSDKLoginManager()
+            
+            FBLoginManager.logInWithPublishPermissions(["publish_actions"], handler: { (response:FBSDKLoginManagerLoginResult!, error: NSError!) in
+                if(error != nil){
+                    // Handle error
+                }
+                else if(response.isCancelled){
+                    // Authorization has been canceled by user
+                    print("Login Cancelled  Token : \(response.token)")
+                }
+                else {
+                    // Authorization successful
+                    print(FBSDKAccessToken.currentAccessToken())
+                    // no longer necessary as the token is already in the response
+                    print(response.token.tokenString)
+                }
+            })
+            
+            //FBSDKLoginManager
+            
+        }
+        
         
         //Share using FB SDK to identify actual sharing result.
         let content = FBSDKShareLinkContent()
-        content.contentTitle = "I’m Checking In At \((selectedBar["venueName"] as? String ?? "")!)!"
+        content.contentTitle = "I just claimed a free drink via Drinkr at \((selectedBar["venueName"] as? String ?? "")!).)!"
         //content.contentURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
         content.imageURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
         
-        FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: self)
+        //FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: self)
         
     }
     

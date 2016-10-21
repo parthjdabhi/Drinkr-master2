@@ -8,13 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		2088180712ADF7319B878381 /* Pods_Drinkr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E29F345ADA7E699FED85017 /* Pods_Drinkr.framework */; };
+		5E1BB6811DBA31BE002B1063 /* DrinksTableviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1BB6801DBA31BE002B1063 /* DrinksTableviewCell.swift */; };
 		5E7A30061DB65D67002F007E /* MyAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7A30051DB65D67002F007E /* MyAnnotation.swift */; };
 		DA36907C1DB0235C00C6A057 /* CouponLayout.png in Resources */ = {isa = PBXBuildFile; fileRef = DA36907A1DB0235C00C6A057 /* CouponLayout.png */; };
 		DA36907D1DB0235C00C6A057 /* RedeemedButton.png in Resources */ = {isa = PBXBuildFile; fileRef = DA36907B1DB0235C00C6A057 /* RedeemedButton.png */; };
 		DA3690C01DB0A76D00C6A057 /* SWRevealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3690BF1DB0A76D00C6A057 /* SWRevealViewController.swift */; };
 		DA5B5F331DB5C1FF00DEC3F0 /* BarNearbyMeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B5F321DB5C1FF00DEC3F0 /* BarNearbyMeCollectionViewCell.swift */; };
 		DA5B5F351DB5C56B00DEC3F0 /* PDCarouselFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B5F341DB5C56B00DEC3F0 /* PDCarouselFlowLayout.swift */; };
-		DA5B5F371DB5C7CC00DEC3F0 /* ViewBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B5F361DB5C7CC00DEC3F0 /* ViewBarViewController.swift */; };
+		DA5B5F371DB5C7CC00DEC3F0 /* BarDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B5F361DB5C7CC00DEC3F0 /* BarDetailViewController.swift */; };
 		DAA2FEE81DB46F2400889935 /* SlidingControl.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA2FEE71DB46F2400889935 /* SlidingControl.m */; };
 		DAC42A801DA5B8190075F524 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC42A7F1DA5B8190075F524 /* AppDelegate.swift */; };
 		DAC42A821DA5B8190075F524 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC42A811DA5B8190075F524 /* ViewController.swift */; };
@@ -72,6 +73,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5E1BB6801DBA31BE002B1063 /* DrinksTableviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrinksTableviewCell.swift; sourceTree = "<group>"; };
 		5E29F345ADA7E699FED85017 /* Pods_Drinkr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Drinkr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E7A30051DB65D67002F007E /* MyAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAnnotation.swift; sourceTree = "<group>"; };
 		63D7516C98595C23AC7E62C4 /* Pods-Drinkr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Drinkr.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Drinkr/Pods-Drinkr.debug.xcconfig"; sourceTree = "<group>"; };
@@ -80,7 +82,7 @@
 		DA3690BF1DB0A76D00C6A057 /* SWRevealViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWRevealViewController.swift; sourceTree = "<group>"; };
 		DA5B5F321DB5C1FF00DEC3F0 /* BarNearbyMeCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarNearbyMeCollectionViewCell.swift; sourceTree = "<group>"; };
 		DA5B5F341DB5C56B00DEC3F0 /* PDCarouselFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDCarouselFlowLayout.swift; sourceTree = "<group>"; };
-		DA5B5F361DB5C7CC00DEC3F0 /* ViewBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewBarViewController.swift; sourceTree = "<group>"; };
+		DA5B5F361DB5C7CC00DEC3F0 /* BarDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarDetailViewController.swift; sourceTree = "<group>"; };
 		DAA2FEE61DB46F2400889935 /* SlidingControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlidingControl.h; sourceTree = "<group>"; };
 		DAA2FEE71DB46F2400889935 /* SlidingControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlidingControl.m; sourceTree = "<group>"; };
 		DAC42A7C1DA5B8190075F524 /* Drinkr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Drinkr.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -213,7 +215,7 @@
 				DAC42AB21DA5DFB90075F524 /* InitialViewController.swift */,
 				DAC42ABB1DA5E1CC0075F524 /* MapViewController.swift */,
 				DA3690BF1DB0A76D00C6A057 /* SWRevealViewController.swift */,
-				DA5B5F361DB5C7CC00DEC3F0 /* ViewBarViewController.swift */,
+				DA5B5F361DB5C7CC00DEC3F0 /* BarDetailViewController.swift */,
 				DA5B5F321DB5C1FF00DEC3F0 /* BarNearbyMeCollectionViewCell.swift */,
 				DAC42ADC1DA6C2E30075F524 /* Venue Screens */,
 				DAC42ABD1DA5E79F0075F524 /* Helper Files */,
@@ -289,6 +291,7 @@
 				DACD0AF21DAC4E7700989143 /* VenueLoginViewController.swift */,
 				DAC42AD81DA6BB590075F524 /* VenueRegisterViewController.swift */,
 				DAC42ADA1DA6C2CC0075F524 /* VenueInformationViewController.swift */,
+				5E1BB6801DBA31BE002B1063 /* DrinksTableviewCell.swift */,
 			);
 			name = "Venue Screens";
 			sourceTree = "<group>";
@@ -524,10 +527,11 @@
 				DA5B5F331DB5C1FF00DEC3F0 /* BarNearbyMeCollectionViewCell.swift in Sources */,
 				DA3690C01DB0A76D00C6A057 /* SWRevealViewController.swift in Sources */,
 				DAC42AD91DA6BB590075F524 /* VenueRegisterViewController.swift in Sources */,
-				DA5B5F371DB5C7CC00DEC3F0 /* ViewBarViewController.swift in Sources */,
+				DA5B5F371DB5C7CC00DEC3F0 /* BarDetailViewController.swift in Sources */,
 				5E7A30061DB65D67002F007E /* MyAnnotation.swift in Sources */,
 				DAC42ACF1DA5E7FD0075F524 /* AEXML.swift in Sources */,
 				DAC42ABC1DA5E1CC0075F524 /* MapViewController.swift in Sources */,
+				5E1BB6811DBA31BE002B1063 /* DrinksTableviewCell.swift in Sources */,
 				DAC42ACB1DA5E7FD0075F524 /* RotateImage.swift in Sources */,
 				DAA2FEE81DB46F2400889935 /* SlidingControl.m in Sources */,
 				DACD0AFB1DADF22900989143 /* UserData.swift in Sources */,

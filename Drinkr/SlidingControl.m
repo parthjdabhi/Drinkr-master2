@@ -143,7 +143,8 @@
     self.verticalDividerEnabled = NO;
     self.type = SlidingControlTypeText;
     self.verticalDividerWidth = 1.0f;
-    _verticalDividerColor = [UIColor blackColor];
+    self.verticalDividerColor = [UIColor colorWithRed:0.000 green:0.600 blue:0.000 alpha:1.000];
+    _verticalDividerColor = [UIColor colorWithRed:0.000 green:0.600 blue:0.000 alpha:1.000];
     self.borderColor = [UIColor blackColor];
     self.borderWidth = 1.0f;
     
@@ -454,6 +455,7 @@
         } else {
             if (!self.selectionIndicatorStripLayer.superlayer) {
                 self.selectionIndicatorStripLayer.frame = [self frameForSelectionIndicator];
+                self.selectionIndicatorStripLayer.backgroundColor = [[UIColor colorWithRed:35.0f/255.0f green:98.0f/255.0f blue:163.0f/255.0f alpha:1.0f] CGColor];
                 [self.scrollView.layer addSublayer:self.selectionIndicatorStripLayer];
                 
                 if (self.selectionStyle == SlidingControlSelectionStyleBox && !self.selectionIndicatorBoxLayer.superlayer) {

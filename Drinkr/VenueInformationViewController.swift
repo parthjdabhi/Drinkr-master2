@@ -38,8 +38,7 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
     @IBOutlet var endTime: IQDropDownTextField?
     @IBOutlet var drinkTable: UITableView!
     
-    let cellReuseIdentifier = "cell"
-    let cellReuseIdentifier1 = "cell1"
+    let cellReuseIdentifier = "DrinksTableviewCell"
     var imagePickerController: UIImagePickerController!
     
     //var drinkArray = [""]
@@ -80,9 +79,10 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
         sControl.selectionStyle = SlidingControlSelectionStyle.FullWidthStripe
         sControl.selectionIndicatorLocation = .Down
         sControl.verticalDividerEnabled = true
-        sControl.verticalDividerColor = UIColor.whiteColor()
+        sControl.verticalDividerColor = clrDarkBlue
+        sControl.selectionIndicatorColor = clrDarkBlue
         sControl.verticalDividerWidth = 1.0
-        sControl.backgroundColor = UIColor.blueColor()
+        sControl.backgroundColor = clrBlue
         
         sControl.titleFormatter = [NSForegroundColorAttributeName:UIColor.whiteColor()]
         sControl.selectionIndicatorColor = UIColor.blackColor()
@@ -117,7 +117,7 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
         imgTapGesture.cancelsTouchesInView = true
         header.addGestureRecognizer(imgTapGesture)
         
-        drinkTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        //drinkTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         drinkTable.delegate = self
         drinkTable.dataSource = self
         
@@ -210,6 +210,9 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
+        
+        //String(format: "%.6f", lastLocation?.coordinate.latitude)
+        
         //detailsField
         // Show/Save selected date
         //venueOpenUntil
@@ -576,17 +579,16 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell:UITableViewCell?
+        let cell:DrinksTableviewCell = self.drinkTable.dequeueReusableCellWithIdentifier("DrinksTableviewCell") as! DrinksTableviewCell
         
-        if tableView == self.drinkTable {
-            cell = drinkTable.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-            let drinks = DealOnSelectedDay[indexPath.row]["Drink"] as? String ?? ""
-            let prices = DealOnSelectedDay[indexPath.row]["Price"] as? String ?? ""
-            let str = "\(drinks)     \(prices)"
-            cell!.textLabel!.textAlignment = .Center
-            cell!.textLabel!.text = "\(str)"
-        }
-        return cell!
+        //cell = self.drinksTable.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as? DrinksTableviewCell
+        let drinks = DealOnSelectedDay[indexPath.row]["Drink"] as? String ?? ""
+        let prices = DealOnSelectedDay[indexPath.row]["Price"] as? String ?? ""
+        
+        cell.lblDrinkName.text = drinks
+        cell.lblPrice.text = "£\(prices)"
+        
+        return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
