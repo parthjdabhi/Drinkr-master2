@@ -498,18 +498,18 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
     func switchIsChanged(mySwitch: UISwitch) {
         let userID = FIRAuth.auth()?.currentUser?.uid
         if mySwitch.on {
-            self.ref.child("venues").child(userID!).updateChildValues(["drinkForLike": "Drink For Like"])
+            self.ref.child("venues").child(userID!).updateChildValues(["drinkForLike": drinkForLike])
         } else {
-            self.ref.child("venues").child(userID!).updateChildValues(["drinkForLike": "No Drink For Like Special"])
+            self.ref.child("venues").child(userID!).updateChildValues(["drinkForLike": noDrinkForLike])
         }
     }
     
     func switchIsChanged2(mySwitch: UISwitch) {
         let userID = FIRAuth.auth()?.currentUser?.uid
         if mySwitch.on {
-            self.ref.child("venues").child(userID!).updateChildValues(["drinkForCheckIn": "Drink For Check-In"])
+            self.ref.child("venues").child(userID!).updateChildValues(["drinkForCheckIn": drinkForCheckIn])
         } else {
-            self.ref.child("venues").child(userID!).updateChildValues(["drinkForCheckIn": "No Drink For Check-In Special"])
+            self.ref.child("venues").child(userID!).updateChildValues(["drinkForCheckIn": noDrinkForCheckIn])
         }
     }
     

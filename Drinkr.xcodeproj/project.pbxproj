@@ -10,6 +10,25 @@
 		2088180712ADF7319B878381 /* Pods_Drinkr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E29F345ADA7E699FED85017 /* Pods_Drinkr.framework */; };
 		5E1BB6811DBA31BE002B1063 /* DrinksTableviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1BB6801DBA31BE002B1063 /* DrinksTableviewCell.swift */; };
 		5E7A30061DB65D67002F007E /* MyAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7A30051DB65D67002F007E /* MyAnnotation.swift */; };
+		5E92D50C1DBB862E0015DEFE /* LTCharacterDiffResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D4F81DBB862E0015DEFE /* LTCharacterDiffResult.swift */; };
+		5E92D50D1DBB862E0015DEFE /* LTCharacterLimbo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D4F91DBB862E0015DEFE /* LTCharacterLimbo.swift */; };
+		5E92D50E1DBB862E0015DEFE /* LTEasing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D4FA1DBB862E0015DEFE /* LTEasing.swift */; };
+		5E92D50F1DBB862E0015DEFE /* LTEmitterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D4FB1DBB862E0015DEFE /* LTEmitterView.swift */; };
+		5E92D5101DBB862E0015DEFE /* LTMorphingEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D4FC1DBB862E0015DEFE /* LTMorphingEffect.swift */; };
+		5E92D5111DBB862E0015DEFE /* LTMorphingLabel+Anvil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D4FD1DBB862E0015DEFE /* LTMorphingLabel+Anvil.swift */; };
+		5E92D5121DBB862E0015DEFE /* LTMorphingLabel+Burn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D4FE1DBB862E0015DEFE /* LTMorphingLabel+Burn.swift */; };
+		5E92D5131DBB862E0015DEFE /* LTMorphingLabel+Evaporate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D4FF1DBB862E0015DEFE /* LTMorphingLabel+Evaporate.swift */; };
+		5E92D5141DBB862E0015DEFE /* LTMorphingLabel+Fall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D5001DBB862E0015DEFE /* LTMorphingLabel+Fall.swift */; };
+		5E92D5151DBB862E0015DEFE /* LTMorphingLabel+Pixelate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D5011DBB862E0015DEFE /* LTMorphingLabel+Pixelate.swift */; };
+		5E92D5161DBB862E0015DEFE /* LTMorphingLabel+Sparkle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D5021DBB862E0015DEFE /* LTMorphingLabel+Sparkle.swift */; };
+		5E92D5171DBB862E0015DEFE /* LTMorphingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D5041DBB862E0015DEFE /* LTMorphingLabel.swift */; };
+		5E92D5181DBB862E0015DEFE /* LTStringDiffResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D5051DBB862E0015DEFE /* LTStringDiffResult.swift */; };
+		5E92D5191DBB862E0015DEFE /* Fire.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E92D5071DBB862E0015DEFE /* Fire.png */; };
+		5E92D51A1DBB862E0015DEFE /* Fragment.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E92D5081DBB862E0015DEFE /* Fragment.png */; };
+		5E92D51B1DBB862E0015DEFE /* Smoke.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E92D5091DBB862E0015DEFE /* Smoke.png */; };
+		5E92D51C1DBB862E0015DEFE /* Sparkle.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E92D50A1DBB862E0015DEFE /* Sparkle.png */; };
+		5E92D51D1DBB862E0015DEFE /* CountdownLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D50B1DBB862E0015DEFE /* CountdownLabel.swift */; };
+		5EC465C91DBB3A3400A08FE8 /* TokenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC465C81DBB3A3400A08FE8 /* TokenViewController.swift */; };
 		DA36907C1DB0235C00C6A057 /* CouponLayout.png in Resources */ = {isa = PBXBuildFile; fileRef = DA36907A1DB0235C00C6A057 /* CouponLayout.png */; };
 		DA36907D1DB0235C00C6A057 /* RedeemedButton.png in Resources */ = {isa = PBXBuildFile; fileRef = DA36907B1DB0235C00C6A057 /* RedeemedButton.png */; };
 		DA3690C01DB0A76D00C6A057 /* SWRevealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3690BF1DB0A76D00C6A057 /* SWRevealViewController.swift */; };
@@ -76,6 +95,26 @@
 		5E1BB6801DBA31BE002B1063 /* DrinksTableviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrinksTableviewCell.swift; sourceTree = "<group>"; };
 		5E29F345ADA7E699FED85017 /* Pods_Drinkr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Drinkr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E7A30051DB65D67002F007E /* MyAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAnnotation.swift; sourceTree = "<group>"; };
+		5E92D4F81DBB862E0015DEFE /* LTCharacterDiffResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LTCharacterDiffResult.swift; sourceTree = "<group>"; };
+		5E92D4F91DBB862E0015DEFE /* LTCharacterLimbo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LTCharacterLimbo.swift; sourceTree = "<group>"; };
+		5E92D4FA1DBB862E0015DEFE /* LTEasing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LTEasing.swift; sourceTree = "<group>"; };
+		5E92D4FB1DBB862E0015DEFE /* LTEmitterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LTEmitterView.swift; sourceTree = "<group>"; };
+		5E92D4FC1DBB862E0015DEFE /* LTMorphingEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LTMorphingEffect.swift; sourceTree = "<group>"; };
+		5E92D4FD1DBB862E0015DEFE /* LTMorphingLabel+Anvil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LTMorphingLabel+Anvil.swift"; sourceTree = "<group>"; };
+		5E92D4FE1DBB862E0015DEFE /* LTMorphingLabel+Burn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LTMorphingLabel+Burn.swift"; sourceTree = "<group>"; };
+		5E92D4FF1DBB862E0015DEFE /* LTMorphingLabel+Evaporate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LTMorphingLabel+Evaporate.swift"; sourceTree = "<group>"; };
+		5E92D5001DBB862E0015DEFE /* LTMorphingLabel+Fall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LTMorphingLabel+Fall.swift"; sourceTree = "<group>"; };
+		5E92D5011DBB862E0015DEFE /* LTMorphingLabel+Pixelate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LTMorphingLabel+Pixelate.swift"; sourceTree = "<group>"; };
+		5E92D5021DBB862E0015DEFE /* LTMorphingLabel+Sparkle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LTMorphingLabel+Sparkle.swift"; sourceTree = "<group>"; };
+		5E92D5031DBB862E0015DEFE /* LTMorphingLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTMorphingLabel.h; sourceTree = "<group>"; };
+		5E92D5041DBB862E0015DEFE /* LTMorphingLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LTMorphingLabel.swift; sourceTree = "<group>"; };
+		5E92D5051DBB862E0015DEFE /* LTStringDiffResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LTStringDiffResult.swift; sourceTree = "<group>"; };
+		5E92D5071DBB862E0015DEFE /* Fire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Fire.png; sourceTree = "<group>"; };
+		5E92D5081DBB862E0015DEFE /* Fragment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Fragment.png; sourceTree = "<group>"; };
+		5E92D5091DBB862E0015DEFE /* Smoke.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Smoke.png; sourceTree = "<group>"; };
+		5E92D50A1DBB862E0015DEFE /* Sparkle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sparkle.png; sourceTree = "<group>"; };
+		5E92D50B1DBB862E0015DEFE /* CountdownLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountdownLabel.swift; sourceTree = "<group>"; };
+		5EC465C81DBB3A3400A08FE8 /* TokenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenViewController.swift; sourceTree = "<group>"; };
 		63D7516C98595C23AC7E62C4 /* Pods-Drinkr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Drinkr.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Drinkr/Pods-Drinkr.debug.xcconfig"; sourceTree = "<group>"; };
 		DA36907A1DB0235C00C6A057 /* CouponLayout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CouponLayout.png; sourceTree = "<group>"; };
 		DA36907B1DB0235C00C6A057 /* RedeemedButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RedeemedButton.png; sourceTree = "<group>"; };
@@ -167,6 +206,39 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		5E92D4F71DBB862E0015DEFE /* LTMorphingLabel */ = {
+			isa = PBXGroup;
+			children = (
+				5E92D4F81DBB862E0015DEFE /* LTCharacterDiffResult.swift */,
+				5E92D4F91DBB862E0015DEFE /* LTCharacterLimbo.swift */,
+				5E92D4FA1DBB862E0015DEFE /* LTEasing.swift */,
+				5E92D4FB1DBB862E0015DEFE /* LTEmitterView.swift */,
+				5E92D4FC1DBB862E0015DEFE /* LTMorphingEffect.swift */,
+				5E92D4FD1DBB862E0015DEFE /* LTMorphingLabel+Anvil.swift */,
+				5E92D4FE1DBB862E0015DEFE /* LTMorphingLabel+Burn.swift */,
+				5E92D4FF1DBB862E0015DEFE /* LTMorphingLabel+Evaporate.swift */,
+				5E92D5001DBB862E0015DEFE /* LTMorphingLabel+Fall.swift */,
+				5E92D5011DBB862E0015DEFE /* LTMorphingLabel+Pixelate.swift */,
+				5E92D5021DBB862E0015DEFE /* LTMorphingLabel+Sparkle.swift */,
+				5E92D5031DBB862E0015DEFE /* LTMorphingLabel.h */,
+				5E92D5041DBB862E0015DEFE /* LTMorphingLabel.swift */,
+				5E92D5051DBB862E0015DEFE /* LTStringDiffResult.swift */,
+				5E92D5061DBB862E0015DEFE /* Particles */,
+			);
+			path = LTMorphingLabel;
+			sourceTree = "<group>";
+		};
+		5E92D5061DBB862E0015DEFE /* Particles */ = {
+			isa = PBXGroup;
+			children = (
+				5E92D5071DBB862E0015DEFE /* Fire.png */,
+				5E92D5081DBB862E0015DEFE /* Fragment.png */,
+				5E92D5091DBB862E0015DEFE /* Smoke.png */,
+				5E92D50A1DBB862E0015DEFE /* Sparkle.png */,
+			);
+			path = Particles;
+			sourceTree = "<group>";
+		};
 		9B5343845782DFDAE8630534 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -216,6 +288,7 @@
 				DAC42ABB1DA5E1CC0075F524 /* MapViewController.swift */,
 				DA3690BF1DB0A76D00C6A057 /* SWRevealViewController.swift */,
 				DA5B5F361DB5C7CC00DEC3F0 /* BarDetailViewController.swift */,
+				5EC465C81DBB3A3400A08FE8 /* TokenViewController.swift */,
 				DA5B5F321DB5C1FF00DEC3F0 /* BarNearbyMeCollectionViewCell.swift */,
 				DAC42ADC1DA6C2E30075F524 /* Venue Screens */,
 				DAC42ABD1DA5E79F0075F524 /* Helper Files */,
@@ -255,6 +328,8 @@
 				DAC42AC71DA5E7FD0075F524 /* AppState.swift */,
 				DAC42AC81DA5E7FD0075F524 /* AEXML.swift */,
 				DA5B5F341DB5C56B00DEC3F0 /* PDCarouselFlowLayout.swift */,
+				5E92D4F71DBB862E0015DEFE /* LTMorphingLabel */,
+				5E92D50B1DBB862E0015DEFE /* CountdownLabel.swift */,
 				DAA2FEE91DB46F2F00889935 /* Sliding Control */,
 				DAC42AD01DA5E8010075F524 /* MBProgressHUD-master */,
 				5E7A30051DB65D67002F007E /* MyAnnotation.swift */,
@@ -429,15 +504,19 @@
 				DACD0AF01DAC4C8000989143 /* BackButton.png in Resources */,
 				DAC42ABA1DA5E0AC0075F524 /* Logo.png in Resources */,
 				DACD0AEB1DAC48D900989143 /* WhiteDot.png in Resources */,
+				5E92D51B1DBB862E0015DEFE /* Smoke.png in Resources */,
 				DACD0AF11DAC4C8000989143 /* LoginButtonRed.png in Resources */,
 				DA36907D1DB0235C00C6A057 /* RedeemedButton.png in Resources */,
 				DAC42AB11DA5DB210075F524 /* GoogleService-Info.plist in Resources */,
 				DAC42AB81DA5E0AC0075F524 /* Background.png in Resources */,
+				5E92D51C1DBB862E0015DEFE /* Sparkle.png in Resources */,
 				DACD0AE91DAC458500989143 /* BarPlaceholder.jpg in Resources */,
+				5E92D5191DBB862E0015DEFE /* Fire.png in Resources */,
 				DAC42A8A1DA5B8190075F524 /* Assets.xcassets in Resources */,
 				DACD0AED1DAC4A2F00989143 /* WhiteCheck.png in Resources */,
 				DACD0AE71DAC29DF00989143 /* Edit.png in Resources */,
 				DAC42AD51DA618B00075F524 /* menu button.png in Resources */,
+				5E92D51A1DBB862E0015DEFE /* Fragment.png in Resources */,
 				DAC42A851DA5B8190075F524 /* Main.storyboard in Resources */,
 				DAC42AD31DA607E60075F524 /* Header.png in Resources */,
 				DA36907C1DB0235C00C6A057 /* CouponLayout.png in Resources */,
@@ -516,29 +595,44 @@
 			files = (
 				DAC42A821DA5B8190075F524 /* ViewController.swift in Sources */,
 				DAC42AC91DA5E7FD0075F524 /* Helper.swift in Sources */,
+				5E92D5131DBB862E0015DEFE /* LTMorphingLabel+Evaporate.swift in Sources */,
+				5E92D50E1DBB862E0015DEFE /* LTEasing.swift in Sources */,
 				DAC42AC01DA5E7B70075F524 /* MBProgressHUD.m in Sources */,
 				DAC42ACE1DA5E7FD0075F524 /* AppState.swift in Sources */,
+				5E92D50F1DBB862E0015DEFE /* LTEmitterView.swift in Sources */,
+				5EC465C91DBB3A3400A08FE8 /* TokenViewController.swift in Sources */,
+				5E92D50D1DBB862E0015DEFE /* LTCharacterLimbo.swift in Sources */,
 				DACD0AF31DAC4E7700989143 /* VenueLoginViewController.swift in Sources */,
 				DAC42ADB1DA6C2CC0075F524 /* VenueInformationViewController.swift in Sources */,
 				DAC42A881DA5B8190075F524 /* Drinkr.xcdatamodeld in Sources */,
 				DAC42A801DA5B8190075F524 /* AppDelegate.swift in Sources */,
 				DAC42ACC1DA5E7FD0075F524 /* Constants.swift in Sources */,
+				5E92D5121DBB862E0015DEFE /* LTMorphingLabel+Burn.swift in Sources */,
 				DA5B5F351DB5C56B00DEC3F0 /* PDCarouselFlowLayout.swift in Sources */,
+				5E92D5141DBB862E0015DEFE /* LTMorphingLabel+Fall.swift in Sources */,
 				DA5B5F331DB5C1FF00DEC3F0 /* BarNearbyMeCollectionViewCell.swift in Sources */,
 				DA3690C01DB0A76D00C6A057 /* SWRevealViewController.swift in Sources */,
+				5E92D5161DBB862E0015DEFE /* LTMorphingLabel+Sparkle.swift in Sources */,
+				5E92D5171DBB862E0015DEFE /* LTMorphingLabel.swift in Sources */,
 				DAC42AD91DA6BB590075F524 /* VenueRegisterViewController.swift in Sources */,
 				DA5B5F371DB5C7CC00DEC3F0 /* BarDetailViewController.swift in Sources */,
 				5E7A30061DB65D67002F007E /* MyAnnotation.swift in Sources */,
+				5E92D51D1DBB862E0015DEFE /* CountdownLabel.swift in Sources */,
 				DAC42ACF1DA5E7FD0075F524 /* AEXML.swift in Sources */,
+				5E92D5101DBB862E0015DEFE /* LTMorphingEffect.swift in Sources */,
 				DAC42ABC1DA5E1CC0075F524 /* MapViewController.swift in Sources */,
+				5E92D50C1DBB862E0015DEFE /* LTCharacterDiffResult.swift in Sources */,
 				5E1BB6811DBA31BE002B1063 /* DrinksTableviewCell.swift in Sources */,
 				DAC42ACB1DA5E7FD0075F524 /* RotateImage.swift in Sources */,
+				5E92D5151DBB862E0015DEFE /* LTMorphingLabel+Pixelate.swift in Sources */,
 				DAA2FEE81DB46F2400889935 /* SlidingControl.m in Sources */,
+				5E92D5181DBB862E0015DEFE /* LTStringDiffResult.swift in Sources */,
 				DACD0AFB1DADF22900989143 /* UserData.swift in Sources */,
 				DAC42ACA1DA5E7FD0075F524 /* CommonUtils.swift in Sources */,
 				DACD0AFD1DAEB6A900989143 /* Bars.swift in Sources */,
 				DAC42ACD1DA5E7FD0075F524 /* Extensions.swift in Sources */,
 				DAC42AB31DA5DFB90075F524 /* InitialViewController.swift in Sources */,
+				5E92D5111DBB862E0015DEFE /* LTMorphingLabel+Anvil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

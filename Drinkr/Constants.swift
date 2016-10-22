@@ -32,3 +32,11 @@ let clrBlue = UIColor.init(rgb: 0x3CA0DD)
 let clrDarkBlue = UIColor(red: 35/255.0, green: 98/255.0, blue: 163/255.0, alpha: 0.8)
 
 let clrPurple = UIColor(red: 154/255.0, green: 88/255.0, blue: 186/255.0, alpha: 1.0)
+
+let drinkForLike = "Drink For Like"
+let noDrinkForLike = "No Drink For Like Special"
+
+let drinkForCheckIn = "Drink For Check-In"
+let noDrinkForCheckIn = "No Drink For Check-In Special"
+
+let noDrinkForLikeAndCheckIn = "No Drink For Like And Check in"

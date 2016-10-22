@@ -17,12 +17,16 @@ class SWRevealViewController: UIViewController {
     
     @IBOutlet var barName: UILabel!
     @IBOutlet var instructions: UILabel!
+    @IBOutlet var btnRedeem: UIButton!
     
     var ref:FIRDatabaseReference = FIRDatabase.database().reference()
+    var LastToken: Dictionary<String,AnyObject> = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        self.btnRedeem.enabled = false
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -66,12 +70,35 @@ class SWRevealViewController: UIViewController {
                         placeDict[stringKey] = keyValue
                     }
                 }
+                
                 placeDict["key"] = child.key
+                self.LastToken = placeDict
                 
                 self.barName.text = placeDict["venueName"] as? String ?? ""
                 
                 print((placeDict["sharedDate"] as? String)?.asDateUTC)
                 print((placeDict["sharedDate"] as? String)?.asDateUTC?.isCheckinWithinSameDay())
+                
+                if let isRedeemed = placeDict["isRedeemed"] as? String
+                    where isRedeemed == "true" {
+                    //SVProgressHUD.showErrorWithStatus("You already redeemed your deal!")
+                    self.btnRedeem.setTitle("Redeemed", forState: .Normal)
+                    self.btnRedeem.enabled = false
+                    self.btnRedeem.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+                } else {
+                    
+                    if let RemainingTime = (placeDict["expirationDate"] as? String)?.asDateUTC?.timeIntervalSinceDate(NSDate())
+                        where RemainingTime > 0
+                    {
+                        self.btnRedeem.enabled = false
+                        self.btnRedeem.setTitle("Expired", forState: .Normal)
+                        self.btnRedeem.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+                    } else {
+                        self.btnRedeem.enabled = true
+                        self.btnRedeem.setTitle("Redeem", forState: .Normal)
+                        self.btnRedeem.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                    }
+                }
                 
                 CardAvailable = true
             }
@@ -81,8 +108,22 @@ class SWRevealViewController: UIViewController {
         })
     }
     
-    @IBAction func redeemButton(sender: AnyObject) {
+    @IBAction func redeemButton(sender: AnyObject)
+    {
+        if self.LastToken["key"] == nil {
+            return
+        }
         
+        SVProgressHUD.showWithStatus("Loading..")
+        let data:Dictionary<String,AnyObject> = ["isRedeemed" : "true","redeemedDate": NSDate().strDateInUTC]
+        self.ref.child("checkin").child(self.LastToken["key"] as? String ?? "").updateChildValues(data, withCompletionBlock: { (error, FRef) in
+            if error != nil {
+                print("Error : ",error)
+                SVProgressHUD.showErrorWithStatus("Failed to redeem!")
+            } else {
+                SVProgressHUD.showSuccessWithStatus("Card redeemed!\nThank you!")
+            }
+        })
     }
 
     @IBAction func logoutButton(sender: AnyObject)

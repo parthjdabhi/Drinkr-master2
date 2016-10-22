@@ -38,3 +38,4 @@ let myUserID = {
 var bars:[Dictionary<String,AnyObject>] = []
 var filteredBars:[Dictionary<String,AnyObject>] = []
 var selectedBar: Dictionary<String,AnyObject> = [:]
+

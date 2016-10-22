@@ -23,6 +23,7 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
     @IBOutlet var drinksTable: UITableView!
     @IBOutlet var header: UIImageView!
     @IBOutlet var vDays: UIView!
+    @IBOutlet var btnCheckin: UIButton!
     
     //let cellReuseIdentifier = "DrinksTableviewCell"
     
@@ -39,6 +40,15 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
         
         SelectedDayTodealsOn = NSDate().daysOfTheWeek().AllDays[0]
         print("selectedBar",selectedBar)
+        
+        if let isDrinkAvailOnCheckIn = selectedBar["drinkForCheckIn"] as? String
+            where isDrinkAvailOnCheckIn == drinkForCheckIn
+        {
+            self.btnCheckin.enabled = true
+        } else {
+            self.btnCheckin.tintColor = UIColor.darkGrayColor()
+            self.btnCheckin.enabled = false
+        }
         
         DealOnSelectedDay = (selectedBar["drinkSpecials"] as? Dictionary<String,AnyObject>)?[SelectedDayTodealsOn!] as? Dictionary<String,AnyObject> ?? [:]
         
@@ -137,10 +147,10 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
         
         //cell = self.drinksTable.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as? DrinksTableviewCell
         let drinks = dict["Drink"] as? String ?? ""
-        let prices = dict["Price"] as? String ?? ""
+        let prices = (dict["Price"] as? String ?? "0").toDouble() ?? 0
         
         cell.lblDrinkName.text = drinks
-        cell.lblPrice.text = "£\(prices)"
+        cell.lblPrice.text = "£\((prices == 0) ? "Free" : String(format: "%0.2f", prices))"
         
         return cell
     }
@@ -152,6 +162,11 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
     // MARK: -
     @IBAction func freeDrinkFor(sender: AnyObject)
     {
+        
+        //---------------------------------------------
+        // METHOD 1
+        //---------------------------------------------
+        
 //        if SLComposeViewController.isAvailableForServiceType(SLServiceTypeFacebook){
 //            let facebookSheet:SLComposeViewController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
 //            facebookSheet.setInitialText("Share on Facebook")
@@ -185,6 +200,28 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
         
         print("Token : \(FBSDKAccessToken.currentAccessToken().tokenString)")
         
+        
+        //---------------------------------------------
+        // METHOD 2
+        //---------------------------------------------
+        
+        // Share using FB SDK to identify actual sharing result.
+        let content = FBSDKShareLinkContent()
+        content.contentTitle = "I just claimed a free drink via Drinkr at \((selectedBar["venueName"] as? String ?? "")!).)!"
+        //content.contentURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
+        content.imageURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
+        
+        FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: self)
+        
+        
+        //---------------------------------------------
+        // METHOD 3
+        //---------------------------------------------
+        // Test Purpose - TO PUBLISH USING GRAPH API
+        // Require >> publish_actions << Permission
+        //---------------------------------------------
+        
+        /*
         if (FBSDKAccessToken.currentAccessToken().hasGranted("publish_actions")) {
             print("publish_actions is already granted. Token-\(FBSDKAccessToken.currentAccessToken())")
             
@@ -192,15 +229,17 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
                 print("Post id : \(result) -- \(result["id"])")
             })
         } else {
-            SVProgressHUD.showErrorWithStatus("Missing facebook permission!", maskType: SVProgressHUDMaskType.Black)
+            SVProgressHUD.showErrorWithStatus("Missing facebook permission!")
             
             let FBLoginManager = FBSDKLoginManager()
-            
-            FBLoginManager.logInWithPublishPermissions(["publish_actions"], handler: { (response:FBSDKLoginManagerLoginResult!, error: NSError!) in
-                if(error != nil){
+            FBLoginManager.loginBehavior = FBSDKLoginBehavior.Web;
+            FBLoginManager.logInWithPublishPermissions(["publish_actions"],
+                                                       fromViewController: self,
+                                                       handler: { (response:FBSDKLoginManagerLoginResult!, error: NSError!) in
+                if(error != nil) {
                     // Handle error
                 }
-                else if(response.isCancelled){
+                else if(response.isCancelled) {
                     // Authorization has been canceled by user
                     print("Login Cancelled  Token : \(response.token)")
                 }
@@ -211,20 +250,14 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
                     print(response.token.tokenString)
                 }
             })
-            
             //FBSDKLoginManager
-            
         }
+        */
         
         
-        //Share using FB SDK to identify actual sharing result.
-        let content = FBSDKShareLinkContent()
-        content.contentTitle = "I just claimed a free drink via Drinkr at \((selectedBar["venueName"] as? String ?? "")!).)!"
-        //content.contentURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
-        content.imageURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
-        
-        //FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: self)
-        
+        //Test Purpose
+        //let tokenVC = self.storyboard?.instantiateViewControllerWithIdentifier("TokenViewController") as? TokenViewController
+        //self.navigationController?.pushViewController(tokenVC!, animated: true)
     }
     
     @IBAction func backButton(sender: AnyObject) {
@@ -237,8 +270,11 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
         if results["postId"] != nil {
             //SVProgressHUD.showSuccessWithStatus("Thank you!")
             
+            let calendar = NSCalendar.currentCalendar()
+            let expirationDate = calendar.dateByAddingUnit(.Minute, value: 20, toDate: NSDate(), options: [])
+            
             SVProgressHUD.showWithStatus("Loading..")
-            let data:Dictionary<String,AnyObject> = ["userId" : myUserID ?? "", "postId": results["postId"] ?? "","venueId":selectedBar["key"] ?? "","venueName":selectedBar["venueName"] ?? "", "sharedAt": NSDate().timeIntervalSinceNow,"sharedDate": NSDate().strDateInUTC]
+            let data:Dictionary<String,AnyObject> = ["userId" : myUserID ?? "", "postId": results["postId"] ?? "","venueId":selectedBar["key"] ?? "","venueName":selectedBar["venueName"] ?? "", "sharedAt": NSDate().timeIntervalSinceNow,"sharedDate": NSDate().strDateInUTC,"expirationDate": expirationDate!.strDateInUTC]
             ref.child("checkin").queryOrderedByChild("userId").queryEqualToValue(myUserID ?? "").queryLimitedToLast(1).observeSingleEventOfType(.Value, withBlock: { (snapshot) -> Void in
                 
                 print("\(NSDate().timeIntervalSince1970)")
@@ -276,15 +312,24 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
                 }
                 
                 if founds == true {
-                    SVProgressHUD.showErrorWithStatus("You can not use another deal in same day!", maskType: .Gradient)
+                    SVProgressHUD.showErrorWithStatus("You can not use another deal in same day!")
                 } else {
-                    SVProgressHUD.showSuccessWithStatus("Thank you!", maskType: .Gradient)
-                    self.ref.child("checkin").childByAutoId().updateChildValues(data)
+                    SVProgressHUD.showWithStatus("Loading..")
+                    self.ref.child("checkin").childByAutoId().updateChildValues(data, withCompletionBlock: { (error, FRef) in
+                        if error != nil {
+                            print("Error : ",error)
+                            SVProgressHUD.showErrorWithStatus("Failed to save coupon!")
+                        } else {
+                            SVProgressHUD.showSuccessWithStatus("Thank you!")
+                            let tokenVC = self.storyboard?.instantiateViewControllerWithIdentifier("TokenViewController") as? TokenViewController
+                            self.navigationController?.pushViewController(tokenVC!, animated: true)
+                        }
+                    })
                 }
             })
             
         } else {
-            SVProgressHUD.showErrorWithStatus("Sharing failed!", maskType: .Gradient)
+            SVProgressHUD.showErrorWithStatus("Sharing failed!")
         }
     }
     
