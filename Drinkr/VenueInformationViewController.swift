@@ -515,8 +515,8 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
     
     func doUpdateDrinkDetail() {
         
-        let drinkString = (self.txtDrinkName.text ?? "").makeFirebaseString()
-        let priceString = (self.txtPrice.text ?? "0").makeFirebaseString()
+        let drinkString = self.txtDrinkName.text ?? ""
+        let priceString = self.txtPrice.text ?? "0"
         
         if btnCloseDrinkView.tag == -1 {
             self.DealOnSelectedDay.append(["Drink" : drinkString, "Price": priceString])
@@ -544,6 +544,9 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
     func doShowDrinkDetailView(drink:Dictionary<String,AnyObject>?,index:Int?)
     {
         //print("Show Detail view for drink - ",drink)
+        
+        txtPrice.text = ""
+        txtDrinkName.text = ""
         
         UIView.animateWithDuration(0.5, animations: {
             self.vDrinkOverlay.alpha = 1
@@ -687,8 +690,8 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
         
         let DeleteAction = UIAlertAction(title: "Delete", style: .Destructive) { (Action) in
             
-            if (self.DealOnSelectedDay[index]["key"] as? String) != nil {
-                //self.ref.child("venues").child(myUserID ?? "").child("drinkSpecials").child("\((self.SelectedDayTodealsOn ?? "")!)").child(key).removeValue()
+            if let key = self.DealOnSelectedDay[index]["key"] as? String {
+                self.ref.child("venues").child(myUserID ?? "").child("drinkSpecials").child("\((self.SelectedDayTodealsOn ?? "")!)").child(key).removeValue()
                 
                 self.DealOnSelectedDay.removeAtIndex(index)
                 self.drinkTable.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
