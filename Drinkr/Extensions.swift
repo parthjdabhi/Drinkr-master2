@@ -43,6 +43,37 @@ extension UIImage {
     }
 }
 
+extension UIView {
+    public func setBorder(width:CGFloat = 1, color: UIColor = UIColor.darkGrayColor())
+    {
+        self.layer.borderColor = color.CGColor
+        self.layer.borderWidth = width
+        self.layer.masksToBounds = true
+        self.clipsToBounds = true
+    }
+    public func setCornerRadious(radious:CGFloat = 4)
+    {
+        self.layer.cornerRadius = radious ?? 4
+        self.layer.masksToBounds = true
+        self.clipsToBounds = true
+    }
+}
+
+extension UITextField {
+    public func setLeftMargin(marginWidth:CGFloat = 4)
+    {
+        let paddingLeft = UIView(frame: CGRectMake(0, 0, marginWidth, self.frame.size.height))
+        self.leftView = paddingLeft
+        self.leftViewMode = UITextFieldViewMode .Always
+    }
+    public func setRightMargin(marginWidth:CGFloat = 4)
+    {
+        let paddingRight = UIView(frame: CGRectMake(0, 0, marginWidth, self.frame.size.height))
+        self.rightView = paddingRight
+        self.rightViewMode = UITextFieldViewMode .Always
+    }
+}
+
 extension UIViewController {
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
@@ -139,8 +170,18 @@ extension NSDate {
     }
 }
 
+
 extension String {
-    
+    func makeFirebaseString()->String{
+        let arrCharacterToReplace = [".","#","$","[","]"]
+        var finalString = self
+        
+        for character in arrCharacterToReplace{
+            finalString = finalString.stringByReplacingOccurrencesOfString(character, withString: " ")
+        }
+        
+        return finalString
+    }
     
     var asDateLocal: NSDate? {
         return NSDate.Formatter.custom.dateFromString(self)

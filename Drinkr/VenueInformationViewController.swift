@@ -38,9 +38,19 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
     @IBOutlet var endTime: IQDropDownTextField?
     @IBOutlet var drinkTable: UITableView!
     
+    @IBOutlet var vDrinkOverlay: UIView!
+    @IBOutlet var vDrink: UIView!
+    @IBOutlet var btnCloseDrinkView: UIButton!
+    @IBOutlet var lblAddDrinkTitle: UILabel!
+    @IBOutlet var txtDrinkName: UITextField!
+    @IBOutlet var txtPrice: UITextField!
+    @IBOutlet var btnSaveDrink: UIButton!
+    
+    
     let cellReuseIdentifier = "DrinksTableviewCell"
     var imagePickerController: UIImagePickerController!
     
+    var drinkDetail:Dictionary<String,AnyObject> = [:]
     //var drinkArray = [""]
     //var priceArray = [""]
     //var drinkString = ""
@@ -65,6 +75,17 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
         drinkForLikeBool.addTarget(self, action: #selector(VenueInformationViewController.switchIsChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         print("myUserID : ",myUserID)
+        
+        self.vDrinkOverlay.alpha = 0
+        vDrink.setBorder(1, color: clrBlue)
+        vDrink.setCornerRadious(6)
+        txtDrinkName.setCornerRadious(4)
+        txtPrice.setCornerRadious(4)
+        txtDrinkName.setLeftMargin(8)
+        txtPrice.setLeftMargin(8)
+        btnSaveDrink.setCornerRadious(4)
+        btnCloseDrinkView.setCornerRadious(btnCloseDrinkView.frame.width/2)
+        btnCloseDrinkView.setBorder(2, color: clrBlue)
         
         SelectedDayTodealsOn = NSDate().daysOfTheWeek().AllDays[0]
         refreshDealData()
@@ -192,7 +213,7 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
                 self.startTime?.setDate(EDate, animated: true)
             }
             
-            self.detailsField.text = "\((snapshot.value!["venueOpenUntil"] as? String ?? "")!) - \((snapshot.value!["venueOpenFrom"] as? String ?? "")!)"
+            self.detailsField.text = "\((snapshot.value!["venueOpenFrom"] as? String ?? "")!) - \((snapshot.value!["venueOpenUntil"] as? String ?? "")!)"
             
         })
         
@@ -473,8 +494,80 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
         }
     }
     
+    // MARK: - Add Drink Detail View
+    @IBAction func actionCloseDrinkDetailView(sender: AnyObject)
+    {
+        doHideDrinkDetailView()
+    }
+    @IBAction func actionSaveDrinkDetail(sender: AnyObject)
+    {
+        doHideDrinkDetailView()
+        doUpdateDrinkDetail()
+    }
+    
+    func doHideDrinkDetailView() {
+        UIView.animateWithDuration(0.5, animations: {
+            self.vDrinkOverlay.alpha = 0
+        }) { (completion) in
+            print(completion)
+        }
+    }
+    
+    func doUpdateDrinkDetail() {
+        
+        let drinkString = (self.txtDrinkName.text ?? "").makeFirebaseString()
+        let priceString = (self.txtPrice.text ?? "0").makeFirebaseString()
+        
+        if btnCloseDrinkView.tag == -1 {
+            self.DealOnSelectedDay.append(["Drink" : drinkString, "Price": priceString])
+            self.drinkTable.insertRowsAtIndexPaths([NSIndexPath(forRow: self.DealOnSelectedDay.count-1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+            
+            self.ref.child("venues").child(myUserID ?? "").child("drinkSpecials").child("\((self.SelectedDayTodealsOn ?? "")!)").childByAutoId().updateChildValues(["Drink" : drinkString, "Price": priceString])
+        } else {
+            
+            //print(" Edit For Record : ",self.DealOnSelectedDay[btnCloseDrinkView.tag])
+            
+            if let key = self.DealOnSelectedDay[btnCloseDrinkView.tag]["key"] as? String {
+                self.DealOnSelectedDay[btnCloseDrinkView.tag]["Drink"] = drinkString
+                self.DealOnSelectedDay[btnCloseDrinkView.tag]["Price"] = priceString
+                
+                self.drinkTable.reloadRowsAtIndexPaths([NSIndexPath(forRow: btnCloseDrinkView.tag, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+                
+                self.ref.child("venues").child(myUserID ?? "").child("drinkSpecials").child("\((self.SelectedDayTodealsOn ?? "")!)").child(key).updateChildValues(["Drink" : drinkString, "Price": priceString], withCompletionBlock: { (error, ref) in
+                    self.refreshDealData()
+                })
+            }
+            
+        }
+    }
+    
+    func doShowDrinkDetailView(drink:Dictionary<String,AnyObject>?,index:Int?)
+    {
+        //print("Show Detail view for drink - ",drink)
+        
+        UIView.animateWithDuration(0.5, animations: {
+            self.vDrinkOverlay.alpha = 1
+        })
+        
+        if let drinkToEdit = drink, indexToEdit = index {
+            btnCloseDrinkView.tag = indexToEdit
+            lblAddDrinkTitle.text = "Update Drink"
+            
+            let drinks = drinkToEdit["Drink"] as? String ?? ""
+            let prices = drinkToEdit["Price"] as? String ?? ""
+            
+            self.txtDrinkName.text = drinks
+            self.txtPrice.text = "\(prices)" //£
+        } else {
+            btnCloseDrinkView.tag = -1
+            lblAddDrinkTitle.text = "Add Your Drink Specials"
+        }
+        
+    }
+    
     // MARK: -
-    func forwardGeocoding(address: String) {
+    func forwardGeocoding(address: String)
+    {
         CLGeocoder().geocodeAddressString(address, completionHandler: { (placemarks, error) in
             if error != nil {
                 print(error)
@@ -514,44 +607,9 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
     }
     
     @IBAction func addMoreDrinksButton(sender: AnyObject) {
-        let alertController = UIAlertController(title: "Specials", message: "Add Your Drink Specials", preferredStyle: .Alert)
         
-        let confirmAction = UIAlertAction(title: "Confirm", style: .Default) { (_) in
-            
-            var drinkString = ""
-            var priceString = ""
-            
-            if let field = alertController.textFields![0] as? UITextField {
-                print("drinkString")
-                drinkString = field.text! as String
-            } else {
-                print("No Special")
-            }
-            if let field1 = alertController.textFields![1] as? UITextField {
-                priceString = field1.text! as String
-            } else {
-                print("No Specials")
-            }
-            
-            self.DealOnSelectedDay.append(["Drink" : drinkString, "Price": priceString])
-            self.drinkTable.insertRowsAtIndexPaths([NSIndexPath(forRow: self.DealOnSelectedDay.count-1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
-            
-            self.ref.child("venues").child(myUserID ?? "").child("drinkSpecials").child("\((self.SelectedDayTodealsOn ?? "")!)").childByAutoId().updateChildValues(["Drink" : drinkString, "Price": priceString])
-        }
+        doShowDrinkDetailView(nil, index: nil)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in }
-        
-        alertController.addTextFieldWithConfigurationHandler { (textField) in
-            textField.placeholder = "Drink"
-        }
-        alertController.addTextFieldWithConfigurationHandler { (textField) in
-            textField.placeholder = "Price"
-        }
-        
-        alertController.addAction(confirmAction)
-        alertController.addAction(cancelAction)
-        
-        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -595,6 +653,22 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let edit = UITableViewRowAction(style: .Normal, title: "Edit") { action, index in
+            print("edit button tapped : ",index)
+            self.doShowDrinkDetailView(self.DealOnSelectedDay[index.row], index: index.row)
+        }
+        edit.backgroundColor = clrBlue
+        
+        let delete = UITableViewRowAction(style: .Normal, title: "Delete") { action, index in
+            print("delete button tapped : ",index)
+            self.confirmDelete(index.row)
+        }
+        delete.backgroundColor = UIColor.redColor()
+        
+        return [delete, edit]
+    }
+    
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete
         {
@@ -613,8 +687,8 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
         
         let DeleteAction = UIAlertAction(title: "Delete", style: .Destructive) { (Action) in
             
-            if let key = self.DealOnSelectedDay[index]["key"] as? String {
-                self.ref.child("venues").child(myUserID ?? "").child("drinkSpecials").child("\((self.SelectedDayTodealsOn ?? "")!)").child(key).removeValue()
+            if (self.DealOnSelectedDay[index]["key"] as? String) != nil {
+                //self.ref.child("venues").child(myUserID ?? "").child("drinkSpecials").child("\((self.SelectedDayTodealsOn ?? "")!)").child(key).removeValue()
                 
                 self.DealOnSelectedDay.removeAtIndex(index)
                 self.drinkTable.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
