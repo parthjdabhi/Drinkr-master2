@@ -226,6 +226,7 @@ extension Dictionary {
     }
 }
 
+
 extension NSDate {
     func isCheckinWithinSameDay() -> Bool {
 //        return false

@@ -549,8 +549,38 @@ extension MapViewController: UISearchBarDelegate {
 
 extension MapViewController: barSearchDelegate {
     
-    func onBarSelected(lon: Double, andLatitude lat: Double, andTitle title: String) {
-        print(lon,lat,title)
+    func onBarSelected(bar: Dictionary<String,AnyObject>) {
+
+        
+        let index = filteredBars.indexOf {
+            //($0["key"] as? String != nil && bar["key"] as? String != nil)
+            if let key1 = $0["key"] as? String, key2 = bar["key"] as? String where key1 == key2 {
+                return true
+            }
+            return false
+        }
+        
+        UIView.animateWithDuration(0, animations: {
+                self.cvBars.reloadData()
+            }) { (finished) in
+                let ipath = NSIndexPath(forItem: index ?? 0, inSection: 0)
+                self.cvBars.scrollToItemAtIndexPath(ipath, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: false)
+        }
+        
+        print("bar is at index \(index)")
+        
+        //let bar = filteredBars[index]
+        
+        //If Location not available Map is not animated
+        if let lat = bar["lat"] as? String, long = bar["long"] as? String
+            where lat != "0" && long != "0" && lat != "0.0" && long != "0.0"
+        {
+            if let lat = Double(lat),let long = Double(long) {
+                let center = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
+                self.mapView.setRegion(region, animated: true)
+            }
+        }
     }
 }
 

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol barSearchDelegate {
-    func onBarSelected(lon:Double, andLatitude lat:Double, andTitle title: String)
+    func onBarSelected(bar: Dictionary<String,AnyObject>)
 }
 
 class BarSearchController: UITableViewController {
@@ -58,6 +58,8 @@ class BarSearchController: UITableViewController {
         didSelectRowAtIndexPath indexPath: NSIndexPath) {
             // 1
             self.dismissViewControllerAnimated(true, completion: nil)
+        
+        delegate.onBarSelected(searchResults[indexPath.row])
             // 2
 //            let correctedAddress:String! = self.searchResults[indexPath.row].stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.symbolCharacterSet())
 //            let url = NSURL(string: "https://maps.googleapis.com/maps/api/geocode/json?address=\(correctedAddress)&sensor=false")

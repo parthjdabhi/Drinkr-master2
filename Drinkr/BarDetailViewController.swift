@@ -225,7 +225,8 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
         // Share using FB SDK to identify actual sharing result.
         let content = FBSDKShareLinkContent()
         content.contentTitle = "I just claimed a free drink via Drinkr at \((selectedBar["venueName"] as? String ?? "")!).)!"
-        content.contentURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
+        //content.contentURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
+        content.imageURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
         //content.imageURL = NSURL(string: selectedBar["imageUrl"] as? String ?? "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
         
         FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: self)

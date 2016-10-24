@@ -538,11 +538,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Drinkr/BarDetailViewController.swift"
-            timestampString = "499009191.716605"
+            timestampString = "499012894.697441"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230"
+            startingLineNumber = "231"
+            endingLineNumber = "231"
             landmarkName = "freeDrinkFor(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -774,12 +774,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Drinkr/MapViewController.swift"
-            timestampString = "499005688.756197"
+            timestampString = "499014131.163286"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "553"
-            endingLineNumber = "553"
-            landmarkName = "onBarSelected(_:andLatitude:andTitle:)"
+            startingLineNumber = "583"
+            endingLineNumber = "583"
+            landmarkName = "onBarSelected(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
