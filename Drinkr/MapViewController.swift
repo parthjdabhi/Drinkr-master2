@@ -13,6 +13,7 @@ import SWRevealViewController
 import Firebase
 import SDWebImage
 import UIActivityIndicator_for_SDWebImage
+import SVProgressHUD
 
 class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource
 {
@@ -24,7 +25,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     @IBOutlet weak var cvBars: UICollectionView!
     
-    
+    var searchResultController:BarSearchController!
+    var searchBar: UISearchBar!
+    var searchString:String = ""
     
     var ref:FIRDatabaseReference!
     var user: FIRUser!
@@ -67,6 +70,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         mapView.delegate = self
         mapView.showsUserLocation = true
         
+        searchResultController = BarSearchController()
+        searchResultController.delegate = self
+//        searchResultController.searchDisplayController?.searchBar.delegate = self
+        
         self.cvBars.showsHorizontalScrollIndicator = false
         let layout = self.cvBars.collectionViewLayout as! PDCarouselFlowLayout
         //layout.spacingMode = PDCarouselFlowLayoutSpacingMode.overlap(visibleOffset: 100)
@@ -104,8 +111,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
     }
     
-    @IBAction func searchButton(sender: AnyObject) {
-        
+    @IBAction func actionSearchBar(sender: AnyObject) {
+        let searchController = UISearchController(searchResultsController: searchResultController)
+        searchController.searchBar.delegate = self
+        //searchController.searchBar.text = self.searchBar.text
+        //searchController.searchBar.showsSearchResultsButton = true
+        self.presentViewController(searchController, animated: true, completion: nil)
     }
     
     
@@ -353,11 +364,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         //cell.image.layer.cornerRadius = max(cell.image.frame.size.width, cell.image.frame.size.height) / 2
         //cell.image.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.1).CGColor
         
-        if let base64String = bar["image"] as? String {
-            if let decodedData = NSData(base64EncodedString: base64String, options: NSDataBase64DecodingOptions()) {
-                let decodedimage = UIImage(data: decodedData)
-                cell.imgBar.image = decodedimage
-            }
+//        if let base64String = bar["image"] as? String {
+//            if let decodedData = NSData(base64EncodedString: base64String, options: NSDataBase64DecodingOptions()) {
+//                let decodedimage = UIImage(data: decodedData)
+//                cell.imgBar.image = decodedimage
+//            }
+//        } else
+        if let imageUrl = bar["imageUrl"] as? String {
+            cell.imgBar.setImageWithURL(NSURL(string: imageUrl), usingActivityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
         }
         
         cell.lblBarTitle.text = bar["venueName"] as? String ?? ""
@@ -434,11 +448,109 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             where lat != "0" && long != "0" && lat != "0.0" && long != "0.0"
         {
             if let lat = Double(lat),let long = Double(long) {
-            let center = CLLocationCoordinate2D(latitude: lat, longitude: long)
-            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
-            self.mapView.setRegion(region, animated: true)
+                let center = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
+                self.mapView.setRegion(region, animated: true)
             }
         }
     }
-
+    
+    // Perform the search.
+    private func doSearch(showLoader:Bool = true)
+    {
+        if showLoader == true {
+            //SVProgressHUD.showWithStatus("Searching..")
+        }
+        barSearchResults = bars.filter({ (bar) -> Bool in
+            if let name = bar["venueName"] as? String {
+                return (name.rangeOfString(searchString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil) ? true : false
+            }
+            return false
+        })
+        print(barSearchResults.count)
+        searchResultController.reloadDataWithArray(barSearchResults)
+    }
+    
+//    private func doSearchSuggestion() {
+//        // Perform request to Yelp API to get the list of businessees
+//        guard let client = YelpClient.sharedInstance else { return }
+//        SVProgressHUD.showWithStatus("Searching..")
+//        client.location = "\(LocationManager.sharedInstance.latitude),\(LocationManager.sharedInstance.longitude)"
+//        client.searchWithTerm(searchString, completion: { (business, error) in
+//            //self.removeMarkers(self.currentBizMarker)
+//            //businessArr = business
+//            //            for biz: Business in businessArr! {
+//            //                let marker = BizMarker(biz: biz)
+//            //                self.currentBizMarker.append(marker)
+//            //                marker.map = self.googleMapsView
+//            //            }
+//            
+//            self.searchResultController.reloadDataWithArray(business)
+//            SVProgressHUD.dismiss()
+//        })
+//    }
 }
+
+extension MapViewController: UISearchBarDelegate {
+    func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
+//        let searchController = UISearchController(searchResultsController: searchResultController)
+//        searchController.searchBar.delegate = self
+//        searchController.searchBar.text = self.searchBar.text
+//        //searchController.searchBar.showsSearchResultsButton = true
+//        self.presentViewController(searchController, animated: true, completion: nil)
+        //return false;
+        searchBar.setShowsCancelButton(true, animated: true)
+        return true;
+    }
+    
+    func searchBarShouldEndEditing(searchBar: UISearchBar) -> Bool {
+        if let searchStr = searchBar.text {
+            print(searchStr)
+            searchString = searchStr
+            searchBar.resignFirstResponder()
+            doSearch()
+            searchResultController.dismissViewControllerAnimated(true, completion: nil)
+        }
+        //searchBar.setShowsCancelButton(false, animated: true)
+        return true;
+    }
+    
+    func searchBarBookmarkButtonClicked(searchBar: UISearchBar) {
+        print("Bookmark")
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBar.text = ""
+        searchString = ""
+        searchBar.resignFirstResponder()
+        //doSearchSuggestion()
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchString = searchBar.text!
+        searchBar.resignFirstResponder()
+        //doSearchSuggestion()
+        //self.searchBar.text = searchString
+        doSearch()
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        print(searchText)
+        //myTimer.invalidate()
+        searchString = searchText
+        doSearch()
+        //myTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(MainViewController.searchInTime), userInfo: nil, repeats: false)
+    }
+    
+    func searchInTime(){
+        //doSearchSuggestion()
+    }
+}
+
+extension MapViewController: barSearchDelegate {
+    
+    func onBarSelected(lon: Double, andLatitude lat: Double, andTitle title: String) {
+        print(lon,lat,title)
+    }
+}
+

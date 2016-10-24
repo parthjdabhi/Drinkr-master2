@@ -90,6 +90,7 @@ class InitialViewController: UIViewController, FBSDKLoginButtonDelegate {
         let graphRequest : FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name, gender, first_name, last_name, locale, email"])
         graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
             
+            AppDelegate.appDelegate?.StartFIRAuthLisener()
             let token = FBSDKAccessToken.currentAccessToken().tokenString
             
             let credential = FIRFacebookAuthProvider.credentialWithAccessToken(token)

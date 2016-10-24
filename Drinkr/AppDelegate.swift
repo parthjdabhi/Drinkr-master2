@@ -11,12 +11,15 @@ import CoreData
 import Firebase
 import FBSDKLoginKit
 import IQKeyboardManagerSwift
+import SVProgressHUD
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
+    static var appDelegate:AppDelegate?
+    static var isListiningAuth:Bool = false
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -28,6 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FIRApp.configure()
 
+        AppDelegate.appDelegate = self
         
         if let user = FIRAuth.auth()?.currentUser
         {
@@ -56,6 +60,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.window!.rootViewController = navigationController
                 self.window!.makeKeyAndVisible()
             }
+            
+            StartFIRAuthLisener()
+            
         }
         else
         {
@@ -99,7 +106,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
     }
-
+    
+    // MARK: -
+    
+    func StartFIRAuthLisener()
+    {
+        if AppDelegate.isListiningAuth == false {
+            return
+        }
+        AppDelegate.isListiningAuth = true
+        
+        FIRAuth.auth()?.addAuthStateDidChangeListener { auth, user in
+            if let user = user {
+                // User is signed in.
+                print("User is signed in -- ",user)
+                LoggedInUser = user
+            } else {
+                // No user is signed in.
+                print(" No User is signed in -- LOGOUT")
+                LoggedInUser = nil
+                
+                SVProgressHUD.dismiss()
+                
+                //App States
+                AppState.sharedInstance.signedIn = false
+                
+                AppDelegate.appDelegate?.goToLoginPage()
+            }
+        }
+    }
+    
+    func goToLoginPage()
+    {
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let loginViewController = mainStoryboard.instantiateViewControllerWithIdentifier("InitialViewController") as! InitialViewController
+        
+        
+        //topViewController()?.pushViewController(loginViewController, animated: true)
+        let navigationController = UINavigationController(rootViewController: loginViewController)
+        navigationController.navigationBarHidden = true
+        self.window!.rootViewController = navigationController
+    }
+    
     // MARK: - Core Data stack
 
     lazy var applicationDocumentsDirectory: NSURL = {
@@ -162,6 +210,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
+    
 }
 
+
+//// MARK: - Firebase Listner
+//
+//func StartFIRAuthLisener()
+//{
+//    FIRAuth.auth()?.addAuthStateDidChangeListener { auth, user in
+//        if let user = user {
+//            // User is signed in.
+//            print("User is signed in -- ",user)
+//            LoggedInUser = user
+//        } else {
+//            // No user is signed in.
+//            print(" No User is signed in -- LOGOUT")
+//            LoggedInUser = nil
+//            
+//            SVProgressHUD.dismiss()
+//            
+//            //App States
+//            AppState.sharedInstance.signedIn = false
+//            
+//            AppDelegate.appDelegate?.goToLoginPage()
+//        }
+//    }
+//}

@@ -29,6 +29,7 @@
 		5E92D51C1DBB862E0015DEFE /* Sparkle.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E92D50A1DBB862E0015DEFE /* Sparkle.png */; };
 		5E92D51D1DBB862E0015DEFE /* CountdownLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E92D50B1DBB862E0015DEFE /* CountdownLabel.swift */; };
 		5EC465C91DBB3A3400A08FE8 /* TokenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC465C81DBB3A3400A08FE8 /* TokenViewController.swift */; };
+		5EF2FF4A1DBE208D005A2DDD /* BarSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF2FF491DBE208D005A2DDD /* BarSearchController.swift */; };
 		DA36907C1DB0235C00C6A057 /* CouponLayout.png in Resources */ = {isa = PBXBuildFile; fileRef = DA36907A1DB0235C00C6A057 /* CouponLayout.png */; };
 		DA36907D1DB0235C00C6A057 /* RedeemedButton.png in Resources */ = {isa = PBXBuildFile; fileRef = DA36907B1DB0235C00C6A057 /* RedeemedButton.png */; };
 		DA3690C01DB0A76D00C6A057 /* SWRevealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3690BF1DB0A76D00C6A057 /* SWRevealViewController.swift */; };
@@ -115,6 +116,7 @@
 		5E92D50A1DBB862E0015DEFE /* Sparkle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sparkle.png; sourceTree = "<group>"; };
 		5E92D50B1DBB862E0015DEFE /* CountdownLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountdownLabel.swift; sourceTree = "<group>"; };
 		5EC465C81DBB3A3400A08FE8 /* TokenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenViewController.swift; sourceTree = "<group>"; };
+		5EF2FF491DBE208D005A2DDD /* BarSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarSearchController.swift; sourceTree = "<group>"; };
 		63D7516C98595C23AC7E62C4 /* Pods-Drinkr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Drinkr.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Drinkr/Pods-Drinkr.debug.xcconfig"; sourceTree = "<group>"; };
 		DA36907A1DB0235C00C6A057 /* CouponLayout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CouponLayout.png; sourceTree = "<group>"; };
 		DA36907B1DB0235C00C6A057 /* RedeemedButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RedeemedButton.png; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				DA3690BF1DB0A76D00C6A057 /* SWRevealViewController.swift */,
 				DA5B5F361DB5C7CC00DEC3F0 /* BarDetailViewController.swift */,
 				5EC465C81DBB3A3400A08FE8 /* TokenViewController.swift */,
+				5EF2FF491DBE208D005A2DDD /* BarSearchController.swift */,
 				DA5B5F321DB5C1FF00DEC3F0 /* BarNearbyMeCollectionViewCell.swift */,
 				DAC42ADC1DA6C2E30075F524 /* Venue Screens */,
 				DAC42ABD1DA5E79F0075F524 /* Helper Files */,
@@ -322,11 +325,11 @@
 				DACD0AFA1DADF22900989143 /* UserData.swift */,
 				DAC42AC21DA5E7FD0075F524 /* Helper.swift */,
 				DAC42AC31DA5E7FD0075F524 /* CommonUtils.swift */,
-				DAC42AC41DA5E7FD0075F524 /* RotateImage.swift */,
 				DAC42AC51DA5E7FD0075F524 /* Constants.swift */,
 				DAC42AC61DA5E7FD0075F524 /* Extensions.swift */,
 				DAC42AC71DA5E7FD0075F524 /* AppState.swift */,
 				DAC42AC81DA5E7FD0075F524 /* AEXML.swift */,
+				DAC42AC41DA5E7FD0075F524 /* RotateImage.swift */,
 				DA5B5F341DB5C56B00DEC3F0 /* PDCarouselFlowLayout.swift */,
 				5E92D4F71DBB862E0015DEFE /* LTMorphingLabel */,
 				5E92D50B1DBB862E0015DEFE /* CountdownLabel.swift */,
@@ -596,6 +599,7 @@
 				DAC42A821DA5B8190075F524 /* ViewController.swift in Sources */,
 				DAC42AC91DA5E7FD0075F524 /* Helper.swift in Sources */,
 				5E92D5131DBB862E0015DEFE /* LTMorphingLabel+Evaporate.swift in Sources */,
+				5EF2FF4A1DBE208D005A2DDD /* BarSearchController.swift in Sources */,
 				5E92D50E1DBB862E0015DEFE /* LTEasing.swift in Sources */,
 				DAC42AC01DA5E7B70075F524 /* MBProgressHUD.m in Sources */,
 				DAC42ACE1DA5E7FD0075F524 /* AppState.swift in Sources */,

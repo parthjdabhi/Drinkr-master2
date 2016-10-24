@@ -24,6 +24,7 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
     @IBOutlet var header: UIImageView!
     @IBOutlet var vDays: UIView!
     @IBOutlet var btnCheckin: UIButton!
+    @IBOutlet var btnLike: FBSDKLikeButton!
     
     //let cellReuseIdentifier = "DrinksTableviewCell"
     
@@ -46,9 +47,22 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
         {
             self.btnCheckin.enabled = true
         } else {
-            self.btnCheckin.tintColor = UIColor.darkGrayColor()
+            self.btnCheckin.backgroundColor = UIColor.darkGrayColor()
             self.btnCheckin.enabled = false
         }
+        
+        //btnLike.objectType = FBSDKLikeObjectType.Page
+        //btnLike.objectID = "https://www.facebook.com/ecreateinfotech/"
+        
+        let likeButton:FBSDKLikeControl = FBSDKLikeControl()
+        likeButton.likeControlStyle = .BoxCount
+        likeButton.objectID = "https://www.facebook.com/ecreateinfotech/";
+        likeButton.center = CGPoint(x: self.btnCheckin.center.x - 46, y: self.btnCheckin.center.y + 42)
+        self.view.addSubview(likeButton)
+        
+        //let horizontalConstraint = NSLayoutConstraint(item: likeButton, attribute: .Top, relatedBy: .Equal, toItem: btnCheckin, attribute: .Bottom, multiplier: 1, constant: 1)
+        //let verticalConstraint = NSLayoutConstraint(item: likeButton, attribute: .CenterY, relatedBy: .Equal, toItem: btnCheckin, attribute: .CenterY, multiplier: 1, constant: 1)
+        //likeButton.addConstraints([horizontalConstraint, verticalConstraint])
         
         DealOnSelectedDay = (selectedBar["drinkSpecials"] as? Dictionary<String,AnyObject>)?[SelectedDayTodealsOn!] as? Dictionary<String,AnyObject> ?? [:]
         
@@ -89,6 +103,9 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
 //        })
         
         
+        if let imageUrl = selectedBar["imageUrl"] as? String {
+            header.setImageWithURL(NSURL(string: imageUrl), placeholderImage: UIImage(named: "BarPlaceholder.jpg"), usingActivityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+        }
         barName.text = selectedBar["venueName"] as? String ?? ""
         barAddress.text = selectedBar["venueAddress"] as? String ?? ""
         dealUntil.text = ("\((selectedBar["venueOpenUntil"] as? String ?? "")!) - \((selectedBar["venueOpenFrom"] as? String ?? "")!)")
@@ -208,8 +225,8 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
         // Share using FB SDK to identify actual sharing result.
         let content = FBSDKShareLinkContent()
         content.contentTitle = "I just claimed a free drink via Drinkr at \((selectedBar["venueName"] as? String ?? "")!).)!"
-        //content.contentURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
-        content.imageURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
+        content.contentURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
+        //content.imageURL = NSURL(string: selectedBar["imageUrl"] as? String ?? "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
         
         FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: self)
         

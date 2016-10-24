@@ -30,12 +30,17 @@ class AppState: NSObject {
 let storage = FIRStorage.storage()
 let storageRef = storage.reference()
 
+var StartListening = false
+var LoggedInUser:FIRUser?
+
 let myUserID = {
-    return FIRAuth.auth()?.currentUser?.uid
+    //return LoggedInUser?.uid
+    return LoggedInUser?.uid ?? FIRAuth.auth()?.currentUser?.uid
 }()
 
 //Globals
 var bars:[Dictionary<String,AnyObject>] = []
 var filteredBars:[Dictionary<String,AnyObject>] = []
+var barSearchResults:[Dictionary<String,AnyObject>] = []
 var selectedBar: Dictionary<String,AnyObject> = [:]
 

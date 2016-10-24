@@ -118,11 +118,13 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
         let SDate = "2016-08-02 10:00:00".asDateLocal
         let EDate = "2016-08-02 22:00:00".asDateLocal
         
+        startTime?.setCornerRadious()
         startTime?.isOptionalDropDown = false
         startTime?.dropDownMode = IQDropDownMode.TimePicker
         startTime?.setDate(SDate, animated: true)
         startTime?.delegate = self
         
+        endTime?.setCornerRadious()
         endTime?.isOptionalDropDown = false
         endTime?.dropDownMode = IQDropDownMode.TimePicker
         endTime?.setDate(EDate, animated: true)
@@ -274,6 +276,9 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
         actionSheetController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
         actionSheetController.addAction(UIAlertAction(title: "Logout", style: UIAlertActionStyle.Destructive, handler: { (actionSheetController) -> Void in
             print("handle Logout action...")
+            
+            //SVProgressHUD.showWithStatus("Loading..")
+            
             //Firebase
             try! FIRAuth.auth()?.signOut()
             
@@ -282,9 +287,9 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
             loginManager.logOut()
             
             //App States
-            AppState.sharedInstance.signedIn = false
-            let loginViewController = self.storyboard?.instantiateViewControllerWithIdentifier("InitialViewController") as! InitialViewController!
-            self.navigationController?.pushViewController(loginViewController, animated: true)
+            //AppState.sharedInstance.signedIn = false
+            //let loginViewController = self.storyboard?.instantiateViewControllerWithIdentifier("InitialViewController") as! InitialViewController!
+            //self.navigationController?.pushViewController(loginViewController, animated: true)
         }))
         presentViewController(actionSheetController, animated: true, completion: nil)
         
@@ -692,7 +697,6 @@ class VenueInformationViewController: UIViewController, UIScrollViewDelegate, UI
             
             if let key = self.DealOnSelectedDay[index]["key"] as? String {
                 self.ref.child("venues").child(myUserID ?? "").child("drinkSpecials").child("\((self.SelectedDayTodealsOn ?? "")!)").child(key).removeValue()
-                
                 self.DealOnSelectedDay.removeAtIndex(index)
                 self.drinkTable.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
                 //self.drinkTable.reloadData()

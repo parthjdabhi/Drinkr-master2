@@ -43,6 +43,7 @@ class VenueLoginViewController: UIViewController {
         else{
             CommonUtils.sharedUtils.showProgress(self.view, label: "Signing in...")
             FIRAuth.auth()?.signInWithEmail(email, password: password) { (user, error) in
+                AppDelegate.appDelegate?.StartFIRAuthLisener()
                 dispatch_async(dispatch_get_main_queue(), {
                     CommonUtils.sharedUtils.hideProgress()
                 })
