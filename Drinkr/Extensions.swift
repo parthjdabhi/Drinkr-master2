@@ -229,8 +229,8 @@ extension Dictionary {
 
 extension NSDate {
     func isCheckinWithinSameDay() -> Bool {
-//        return false
-        return (self.formattedWith("DD") == NSDate().formattedWith("DD")) ? true : false
+        return false
+//        return (self.formattedWith("DD") == NSDate().formattedWith("DD")) ? true : false
     }
 }
 

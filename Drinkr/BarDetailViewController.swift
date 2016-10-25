@@ -224,13 +224,13 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
         
         // Share using FB SDK to identify actual sharing result.
         let content = FBSDKShareLinkContent()
+        content.contentDescription = "Drinkr app"
         content.contentTitle = "I just claimed a free drink via Drinkr at \((selectedBar["venueName"] as? String ?? "")!).)!"
         //content.contentURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
         content.imageURL = NSURL(string: "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
         //content.imageURL = NSURL(string: selectedBar["imageUrl"] as? String ?? "https://www.google.co.in/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")
         
         FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: self)
-        
         
         //---------------------------------------------
         // METHOD 3
@@ -285,7 +285,7 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
     // MARK: - FBSDKSharingDelegate!
     func sharer(sharer: FBSDKSharing!, didCompleteWithResults results: [NSObject : AnyObject]!) {
         print("Sharing success : ",results)
-        if results["postId"] != nil {
+        //if results["postId"] != nil {
             //SVProgressHUD.showSuccessWithStatus("Thank you!")
             
             let calendar = NSCalendar.currentCalendar()
@@ -318,7 +318,6 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
                         else if let keyValue = childDict.valueForKey(stringKey) as? NSDictionary {
                             placeDict[stringKey] = keyValue
                         }
-                        
                     }
                     placeDict["key"] = child.key
                     
@@ -346,9 +345,9 @@ class BarDetailViewController: UIViewController, FBSDKSharingDelegate {
                 }
             })
             
-        } else {
-            SVProgressHUD.showErrorWithStatus("Sharing failed!")
-        }
+//        } else {
+//            SVProgressHUD.showErrorWithStatus("Sharing failed!")
+//        }
     }
     
     func sharer(sharer: FBSDKSharing!, didFailWithError error: NSError!) {

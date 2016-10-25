@@ -542,7 +542,7 @@ extension MapViewController: UISearchBarDelegate {
         //myTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(MainViewController.searchInTime), userInfo: nil, repeats: false)
     }
     
-    func searchInTime(){
+    func searchInTime() {
         //doSearchSuggestion()
     }
 }

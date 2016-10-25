@@ -102,6 +102,10 @@ class SWRevealViewController: UIViewController {
                 
                 CardAvailable = true
             }
+            
+            if snapshot.childrenCount == 0 {
+                SVProgressHUD.dismiss()
+            }
             if CardAvailable == false {
                 SVProgressHUD.showWithStatus("You do not have any deal!")
             }

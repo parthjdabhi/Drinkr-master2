@@ -141,6 +141,7 @@ class TokenViewController: UIViewController, CountdownLabelDelegate {
                     self.lblTime.countdownDelegate = self
                     self.lblTime.setCountDownTime(RemainingTime)
                     self.lblTime.start()
+                    self.btnRedeem.enabled = true
                 }
                 
                 
